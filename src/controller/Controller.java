@@ -1,22 +1,22 @@
 package controller;
 
+import com.bulletphysics.dynamics.RigidBody;
 import model.Model;
 import view.View;
 
+import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
 /**
- * <p> TODO: this
- * </p>
- * <p> Класс контроллера. Контроллер обновляет {@link model.Model модель}
- * и обновляется {@link view.View представлением}.
- * </p>
+ * Класс контроллера. Контроллер обновляет {@link model.Model модель}
+ * и визуализирует ее с помощью {@link view.View представления}
+ *
  * @author Mike Sorokin
  */
-public class Controller implements Observer {
+public class Controller {
     /**
-     * {@link java.lang.Thread Поток}, в котором контроллер обновляет {@link model.Model модель}.
+     * Поток, в котором контроллер обновляет {@link model.Model модель}.
      */
     private Thread thread;
 
@@ -33,18 +33,28 @@ public class Controller implements Observer {
     private double lastFrame = 0;
 
     /**
-     * Создает новый контроллер. Устанавливает себя как контроллер для <code>view</code>.
-     *
-     * @param view Представление, которое обновляет этот контроллер.
+     * Модель, которую использует и обновляет этот контроллер.
      */
-    public Controller(View view) {
-        view.setController(this);
-        getDelta();
-        thread = new Thread(() -> {
+    private Model model;
+
+    /**
+     * Представление, когорое использует этот контроллер.
+     */
+    private View view;
+
+    /**
+     * Создает новый контроллер, который использует и обновляет модель <code>model</code>,
+     * и представление <code>view</code>.
+     * @param model модель, которую использует и обновляет этот контроллер
+     * @param view представление, когорое использует этот контроллер
+     */
+    public Controller(Model model, View view) {
+        this.model = model;
+        this.view = view;
+        this.thread = new Thread(() -> {
             while (!isStopRequested()) {
-                double dt = getDelta();
-                Model.model.update(dt);
-                Model.model.notifyObservers();
+                model.update(getDelta());
+                updateView();
             }
         });
     }
@@ -80,7 +90,7 @@ public class Controller implements Observer {
     /**
      * Начинает обновление {@link model.Model модели}.
      */
-    public void start() {
+    public void startSimulation() {
         thread.start();
     }
 
@@ -88,7 +98,7 @@ public class Controller implements Observer {
      * Запрашивает остановку обновления {@link model.Model модели}.
      * Остановка произойдет после конца текущео фрейма.
      */
-    public void stop() {
+    public void stopSimulation() {
         this.stopRequested = true;
     }
 
@@ -102,8 +112,51 @@ public class Controller implements Observer {
         return thread.isAlive();
     }
 
-    @Override
-    public void update(Observable o, Object arg) {
-        //TODO: this
+    /**
+     * Добавляет тело в симуляцию.
+     * @param body тело
+     */
+    public void addBody(RigidBody body) {
+        model.addBody(body);
+    }
+
+    /**
+     * Удаляет тело из симуляции.
+     * @param body тело
+     */
+    public void removeBody(RigidBody body) {
+        model.removeBody(body);
+    }
+
+    /**
+     * Возвращает список тел, учавствующих в симуляции.
+     * @return список тел, учавствующих в симуляции
+     */
+    public List<RigidBody> getBodies() {
+        return model.getBodies();
+    }
+
+    /**
+     * Визуализирует симуляцию.
+     */
+    public void updateView() {
+        view.show(model.getBodies());
+    }
+
+    /**
+     * Инициализирует модель и представление. Обязательно вызвать перед использованием этого контроллера.
+     */
+    public void init() {
+        model.init();
+        view.init();
+    }
+
+    /**
+     * Удаляет объекты, используемые моделью и представлением, причем после этого контроллер будет непригоден к исползованию.
+     * Обязательно вызывать перед завершением работы с этим контроллером.
+     */
+    public void destroy() {
+        model.init();
+        view.init();
     }
 }

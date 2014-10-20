@@ -1,40 +1,43 @@
 package view;
 
+import com.bulletphysics.dynamics.RigidBody;
 import controller.Controller;
 import model.Model;
 
+import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
 /**
- * <p> TODO: this
- * </p>
- * <p> Класс представления. Представление читает {@link model.Model модель} данных, визуализирует ее и
- * сообщает {@link controller.Controller контроллеру} о действиях пользователя.
- * </p>
+ * Класс представления. Представление умеет визуализировать симуляцию.
+ *
  * @author Mike Sorokin
  */
-public class View extends Observable implements Observer {
+public class View {
 
     /**
-     * Создает новое представление и регистриует его в {@link model.Model модели}.
+     * Инициализирует представление. Обязательно вызвать перед использованием этого представления.
      */
-    public View() {
-        Model.model.addObserver(this);
-    }
-
-    @Override
-    public void update(Observable o, Object arg) {
-        //TODO: this
-        this.setChanged();
-        this.notifyObservers();
+    public void init() {
+        //TODO: инициализация окна, контекстов openGL, openAL (если будем использовать звук), текстур, шейдеров, и еще чего-нибудь.
     }
 
     /**
-     * Устанавливает {@link controller.Controller контроллер}, который это представление будет оновлять.
-     * @param controller {@link controller.Controller контроллер}, который это представление будет оновлять.
+     * Удаляет объекты, используемые представлением, причем после этого оно будет непригодно к исползованию.
+     * Обязательно вызывать перед завершением работы с этим представлением.
      */
-    public void setController(Controller controller) {
-        this.addObserver(controller);
+    public void destroy() {
+        //TODO: удаление текстур, шейдеров, программ (которые для openGL), звуков, displayList' ов и т.д.
+        //Хоть мы и пишем на джаве, openGL и openAL - Сишные, и все объекты надо поудалять.
+    }
+
+    /**
+     * Визуализирует симуляцию.
+     * @param bodies тела в симуляции (возвращаются методом {@link model.Model#getBodies()})
+     */
+    public void show(List<RigidBody> bodies) {
+        bodies.stream().forEach(body -> {
+            //TODO: визуализация одного тела
+        });
     }
 }
