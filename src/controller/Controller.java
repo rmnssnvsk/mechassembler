@@ -71,9 +71,10 @@ public class Controller implements Observer {
      * @return Время, которое прошло с момента последнего вызова этого метода в секундах.
      */
     private double getDelta() {
-        double dt = getTime() - lastFrame;
-        lastFrame = getTime();
-        return dt;
+        double currentTime = getTime();
+        double delta = currentTime - lastFrame;
+        lastFrame += currentTime;
+        return delta;
     }
 
     /**
