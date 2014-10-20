@@ -83,7 +83,7 @@ public class Controller {
     private double getDelta() {
         double currentTime = getTime();
         double delta = currentTime - lastFrame;
-        lastFrame += currentTime;
+        lastFrame += delta;
         return delta;
     }
 
@@ -91,6 +91,7 @@ public class Controller {
      * Начинает обновление {@link model.Model модели}.
      */
     public void startSimulation() {
+        this.stopRequested = false;
         thread.start();
     }
 
@@ -156,7 +157,7 @@ public class Controller {
      * Обязательно вызывать перед завершением работы с этим контроллером.
      */
     public void destroy() {
-        model.init();
-        view.init();
+        model.destroy();
+        view.destroy();
     }
 }

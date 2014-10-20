@@ -25,7 +25,7 @@ public class Main {
      */
     public static void main(String[] args) {
         Model model = new Model();
-        // TODO: Загрузка/созлание модели.
+        // TODO: Загрузка/создание модели.
         View view = new View();
         Controller controller = new Controller(model, view);
         controller.init();

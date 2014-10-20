@@ -14,6 +14,9 @@ import java.util.List;
 public class Model {
     private List<RigidBody> bodies;
 
+    /**
+     * Создает новую модель.
+     */
     public Model() {
         bodies = new ArrayList<>();
     }
