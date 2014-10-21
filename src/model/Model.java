@@ -1,7 +1,17 @@
 package model;
 
+import com.bulletphysics.collision.broadphase.BroadphaseInterface;
+import com.bulletphysics.collision.broadphase.DbvtBroadphase;
+import com.bulletphysics.collision.dispatch.CollisionConfiguration;
+import com.bulletphysics.collision.dispatch.CollisionDispatcher;
+import com.bulletphysics.collision.dispatch.DefaultCollisionConfiguration;
+import com.bulletphysics.dynamics.DiscreteDynamicsWorld;
+import com.bulletphysics.dynamics.DynamicsWorld;
 import com.bulletphysics.dynamics.RigidBody;
+import com.bulletphysics.dynamics.constraintsolver.ConstraintSolver;
+import com.bulletphysics.dynamics.constraintsolver.SequentialImpulseConstraintSolver;
 
+import javax.vecmath.Vector3f;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,13 +22,41 @@ import java.util.List;
  * @author Mike Sorokin
  */
 public class Model {
-    private List<RigidBody> bodies;
+    /**
+     * Вектор ускорения свободного падения по умолчанию.
+     */
+    public static final Vector3f DEFAULT_GRAVITY = new Vector3f(0, -10, 0);
 
     /**
-     * Создает новую модель.
+     * Мир, где происходит симуляция
+     */
+    private DynamicsWorld world;
+
+    /**
+     * Список тел, учавствующих в симуляции
+     */
+    private List<Body> bodies;
+
+    /**
+     * Создает и инициализирует модель. В качестве векора ускорения свободгого падения
+     * используется {@link model.Model#DEFAULT_GRAVITY}
      */
     public Model() {
+        this(DEFAULT_GRAVITY);
+    }
+
+    /**
+     * Создает и инициализирует модель.
+     * @param gravity вектор ускорения свободного падения
+     */
+    public Model(Vector3f gravity) {
         bodies = new ArrayList<>();
+        BroadphaseInterface broadphaseInterface = new DbvtBroadphase();
+        CollisionConfiguration collisionConfiguration = new DefaultCollisionConfiguration();
+        CollisionDispatcher collisionDispatcher = new CollisionDispatcher(collisionConfiguration);
+        ConstraintSolver constraintSolver = new SequentialImpulseConstraintSolver();
+        world = new DiscreteDynamicsWorld(collisionDispatcher, broadphaseInterface, constraintSolver, collisionConfiguration);
+        world.setGravity(gravity);
     }
 
     /**
@@ -26,45 +64,57 @@ public class Model {
      * @param t промежуток времени в секундах.
      */
     public void update(double t) {
-        // TODO: взимодействие тел
+        world.stepSimulation((float) t);
     }
 
     /**
      * Добавляет тело в симуляцию.
      * @param body тело
      */
-    public void addBody(RigidBody body) {
+    public void addBody(Body body) {
         bodies.add(body);
+        world.addRigidBody(body.getRigidBody());
     }
 
     /**
      * Удаляет тело из симуляции.
      * @param body тело
      */
-    public void removeBody(RigidBody body) {
+    public void removeBody(Body body) {
         bodies.remove(body);
+        world.removeRigidBody(body.getRigidBody());
+        body.getRigidBody().destroy();
     }
 
     /**
      * Возвращает список тел, учавствующих в симуляции.
      * @return список тел, учавствующих в симуляции
      */
-    public List<RigidBody> getBodies() {
+    public List<Body> getBodies() {
         return bodies;
     }
 
     /**
-     * Инициализирует модель. Обязательно вызвать перед использованием этой модели.
+     * Устанавливает вектор свободного падения.
+     * @param gravity новый вектор ускорения свободного падения
      */
-    public void init() {
-        //TODO: инициализация модели (если надо).
+    public void setGravity(Vector3f gravity) {
+        world.setGravity(gravity);
+    }
+
+    /**
+     * Возвращает текущий вектор ускорения свободгого падения.
+     * @return текущий вектор ускорения свободгого падения
+     */
+    public Vector3f getGravity() {
+        return world.getGravity(new Vector3f());
     }
 
     /**
      * Удаляет объекты, используемые моделью, причем после этого оно будет непригодно к исползованию.
      * Обязательно вызывать перед завершением работы с этой моделью.
      */
-    public void destroy() {
-        //TODO: удаление объектов (если надо).
+    public void delete() {
+        bodies.stream().forEach(Body::delete);
     }
 }

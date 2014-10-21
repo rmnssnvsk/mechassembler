@@ -1,12 +1,12 @@
 package controller;
 
 import com.bulletphysics.dynamics.RigidBody;
+import model.Body;
 import model.Model;
 import view.View;
 
+import javax.vecmath.Vector3f;
 import java.util.List;
-import java.util.Observable;
-import java.util.Observer;
 
 /**
  * Класс контроллера. Контроллер обновляет {@link model.Model модель}
@@ -52,9 +52,15 @@ public class Controller {
         this.model = model;
         this.view = view;
         this.thread = new Thread(() -> {
+            this.stopRequested = false;
+            view.setStopRequested(false);
+            getDelta();
             while (!isStopRequested()) {
                 model.update(getDelta());
                 updateView();
+                if (view.isStopRequested()) {
+                    this.stopRequested = true;
+                }
             }
         });
     }
@@ -92,7 +98,7 @@ public class Controller {
      */
     public void startSimulation() {
         this.stopRequested = false;
-        thread.start();
+        thread.run();
     }
 
     /**
@@ -117,7 +123,7 @@ public class Controller {
      * Добавляет тело в симуляцию.
      * @param body тело
      */
-    public void addBody(RigidBody body) {
+    public void addBody(Body body) {
         model.addBody(body);
     }
 
@@ -125,7 +131,7 @@ public class Controller {
      * Удаляет тело из симуляции.
      * @param body тело
      */
-    public void removeBody(RigidBody body) {
+    public void removeBody(Body body) {
         model.removeBody(body);
     }
 
@@ -133,8 +139,24 @@ public class Controller {
      * Возвращает список тел, учавствующих в симуляции.
      * @return список тел, учавствующих в симуляции
      */
-    public List<RigidBody> getBodies() {
+    public List<Body> getBodies() {
         return model.getBodies();
+    }
+
+    /**
+     * Устанавливает вектор свободного падения.
+     * @param gravity новый вектор ускорения свободного падения
+     */
+    public void setGravity(Vector3f gravity) {
+        model.setGravity(gravity);
+    }
+
+    /**
+     * Возвращает текущий вектор ускорения свободгого падения.
+     * @return текущий вектор ускорения свободгого падения
+     */
+    public Vector3f getGravity() {
+        return model.getGravity();
     }
 
     /**
@@ -145,19 +167,11 @@ public class Controller {
     }
 
     /**
-     * Инициализирует модель и представление. Обязательно вызвать перед использованием этого контроллера.
-     */
-    public void init() {
-        model.init();
-        view.init();
-    }
-
-    /**
      * Удаляет объекты, используемые моделью и представлением, причем после этого контроллер будет непригоден к исползованию.
      * Обязательно вызывать перед завершением работы с этим контроллером.
      */
-    public void destroy() {
-        model.destroy();
-        view.destroy();
+    public void delete() {
+        model.delete();
+        view.delete();
     }
 }
