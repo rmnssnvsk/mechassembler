@@ -8,8 +8,10 @@ import static org.lwjgl.opengl.GL11.*;
  */
 public class DisplayList {
     public final int list;
+    public final Runnable code;
 
     public DisplayList(Runnable list) {
+        this.code = list;
         this.list = glGenLists(1);
         glNewList(this.list, GL_COMPILE);
         list.run();

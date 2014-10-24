@@ -10,6 +10,7 @@ import com.bulletphysics.dynamics.DynamicsWorld;
 import com.bulletphysics.dynamics.RigidBody;
 import com.bulletphysics.dynamics.constraintsolver.ConstraintSolver;
 import com.bulletphysics.dynamics.constraintsolver.SequentialImpulseConstraintSolver;
+import view.Camera;
 
 import javax.vecmath.Vector3f;
 import java.util.ArrayList;
@@ -17,7 +18,7 @@ import java.util.List;
 
 /**
  * Класс модели. Модель содержит в себе всю информацию о симуляции и умеет обновлять
- * ее с помощью метода {@link model.Model#update(double)}.
+ * ее с помощью метода {@link model.Model#update(float)}.
  *
  * @author Mike Sorokin
  */
@@ -37,19 +38,22 @@ public class Model {
      */
     private List<Body> bodies;
 
+    private Camera camera;
+
     /**
      * Создает и инициализирует модель. В качестве векора ускорения свободгого падения
      * используется {@link model.Model#DEFAULT_GRAVITY}
      */
-    public Model() {
-        this(DEFAULT_GRAVITY);
+    public Model(Camera camera) {
+        this(camera, DEFAULT_GRAVITY);
     }
 
     /**
      * Создает и инициализирует модель.
      * @param gravity вектор ускорения свободного падения
      */
-    public Model(Vector3f gravity) {
+    public Model(Camera camera, Vector3f gravity) {
+        this.camera = camera;
         bodies = new ArrayList<>();
         BroadphaseInterface broadphaseInterface = new DbvtBroadphase();
         CollisionConfiguration collisionConfiguration = new DefaultCollisionConfiguration();
@@ -63,8 +67,9 @@ public class Model {
      * Обновляет состояние симуляции.
      * @param t промежуток времени в секундах.
      */
-    public void update(double t) {
-        world.stepSimulation((float) t);
+    public void update(float t) {
+        camera.update(t);
+        world.stepSimulation(t);
     }
 
     /**

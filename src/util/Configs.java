@@ -19,7 +19,10 @@ public class Configs {
             BufferedReader reader = new BufferedReader(new FileReader("res/settings.cfg"));
             String line;
             while ((line = reader.readLine()) != null) {
-                line = line.trim().split(" *#")[0];
+                if (line.matches("\\s*#.*")) {
+                    continue;
+                }
+                line = line.trim();
                 if (line.matches("[a-zA-Z0-9_]*\\s*=\\s*.*")) {
                     String[] param = line.split(" *= *");
                     params.put(param[0], param[1]);

@@ -1,8 +1,10 @@
 package controller;
 
 import com.bulletphysics.dynamics.RigidBody;
+import com.bulletphysics.linearmath.Transform;
 import model.Body;
 import model.Model;
+import org.lwjgl.Sys;
 import view.View;
 
 import javax.vecmath.Vector3f;
@@ -38,7 +40,7 @@ public class Controller {
     private Model model;
 
     /**
-     * Представление, когорое использует этот контроллер.
+     * Представление, которое использует этот контроллер.
      */
     private View view;
 
@@ -56,7 +58,8 @@ public class Controller {
             view.setStopRequested(false);
             getDelta();
             while (!isStopRequested()) {
-                model.update(getDelta());
+                float dt = getDelta();
+                model.update(dt);
                 updateView();
                 if (view.isStopRequested()) {
                     this.stopRequested = true;
@@ -86,11 +89,11 @@ public class Controller {
      * Первый вызов этого метода возвращает время, которое прошло с полночи 1 Января 1970 года в секундах.
      * @return Время, которое прошло с момента последнего вызова этого метода в секундах.
      */
-    private double getDelta() {
+    private float getDelta() {
         double currentTime = getTime();
         double delta = currentTime - lastFrame;
         lastFrame += delta;
-        return delta;
+        return (float) delta;
     }
 
     /**

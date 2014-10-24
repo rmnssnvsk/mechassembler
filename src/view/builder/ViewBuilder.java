@@ -1,6 +1,8 @@
-package util.builder;
+package view.builder;
 
 import org.lwjgl.opengl.DisplayMode;
+import util.Program;
+import view.Camera;
 import view.View;
 
 /**
@@ -15,6 +17,8 @@ public class ViewBuilder {
     private boolean vSync = false;
     private boolean resizable = false;
     private String title = "Window";
+    private Camera camera = new CameraBuilder().build();
+    private String program = null;
 
     public ViewBuilder setX(int x) {
         this.x = x;
@@ -46,7 +50,17 @@ public class ViewBuilder {
         return this;
     }
 
+    public ViewBuilder setCamera(Camera camera) {
+        this.camera = camera;
+        return this;
+    }
+
+    public ViewBuilder setProgram(String program) {
+        this.program = program;
+        return this;
+    }
+
     public View build() {
-        return new View(new DisplayMode(x, y), fullscreen, vSync, resizable, title);
+        return new View(new DisplayMode(x, y), fullscreen, vSync, resizable, title, camera, program);
     }
 }

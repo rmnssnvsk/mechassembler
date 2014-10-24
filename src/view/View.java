@@ -1,20 +1,17 @@
 package view;
 
 import com.bulletphysics.linearmath.Transform;
-import javafx.scene.transform.MatrixType;
+import com.sun.istack.internal.Nullable;
 import model.Body;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.LWJGLException;
-import org.lwjgl.Sys;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.util.glu.GLU;
+import util.DisplayList;
+import util.Program;
 
-import javax.vecmath.Matrix4f;
-import javax.vecmath.Quat4f;
-import javax.vecmath.Vector3f;
-import java.io.BufferedReader;
 import java.nio.FloatBuffer;
 import java.util.List;
 
@@ -26,12 +23,14 @@ import static org.lwjgl.opengl.GL11.*;
  * @author Mike Sorokin
  */
 public class View {
-    public boolean stopRequested = false;
+    private boolean stopRequested = false;
+    private Camera camera;
+    private Program program = null;
 
     /**
      * Создает и инициализирует представление.
      */
-    public View(DisplayMode displayMode, boolean fullscreen, boolean vSync, boolean resizable, String title) {
+    public View(DisplayMode displayMode, boolean fullscreen, boolean vSync, boolean resizable, String title, Camera camera, String program) {
         try {
             if (!fullscreen)
                 Display.setDisplayMode(displayMode);
@@ -43,14 +42,32 @@ public class View {
         } catch (LWJGLException e) {
             e.printStackTrace();
         }
-        glMatrixMode(GL_PROJECTION);
-        glLoadIdentity();
-        GLU.gluPerspective(60, Display.getWidth() / (float) Display.getHeight(), .0001f, 1000);
-        glMatrixMode(GL_MODELVIEW);
-        glLoadIdentity();
-        glTranslatef(0, -5, -50);
+        this.camera = camera;
+        camera.applyProjectionMatrix();
         glEnable(GL_DEPTH_TEST);
         glDepthFunc(GL_LEQUAL);
+        glLight(GL_LIGHT0, GL_AMBIENT, asFloatBuffer(.3f, .3f, .3f, 1));
+        glLight(GL_LIGHT0, GL_DIFFUSE, asFloatBuffer(1, 1, 1, 1));
+        glLight(GL_LIGHT0, GL_SPECULAR, asFloatBuffer(10, 10, 10, 1));
+        glLight(GL_LIGHT0, GL_POSITION, asFloatBuffer(100, 10, 10, 1));
+        glMaterial(GL_FRONT, GL_AMBIENT, asFloatBuffer(1, 1, 1, 1));
+        glMaterial(GL_FRONT, GL_DIFFUSE, asFloatBuffer(1, 1, 1, 1));
+        glMaterial(GL_FRONT, GL_SPECULAR, asFloatBuffer(1, 1, 1, 1));
+        glMaterialf(GL_FRONT, GL_SHININESS, 128);
+        glDepthFunc(GL_LESS);
+        if (program == null) {
+            Program.useDefault();
+        } else {
+            this.program = new Program(program);
+            this.program.use();
+        }
+    }
+
+    private FloatBuffer asFloatBuffer(float... floats) {
+        FloatBuffer buffer = BufferUtils.createFloatBuffer(floats.length);
+        buffer.put(floats);
+        buffer.flip();
+        return buffer;
     }
 
     /**
@@ -58,15 +75,20 @@ public class View {
      * Обязательно вызывать перед завершением работы с этим представлением.
      */
     public void delete() {
+        if (program != null)
+            program.delete();
         Display.destroy();
     }
 
     /**
      * Визуализирует симуляцию.
-     * @param bodies тела в сим уляции (возвращаются методом {@link model.Model#getBodies()})
+     *
+     * @param bodies тела в симуляции (возвращаются методом {@link model.Model#getBodies()})
      */
     public void show(List<Body> bodies) {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        glLoadIdentity();
+        camera.applyViewMatrix();
         bodies.stream().forEach(body -> {
             glPushMatrix();
             float[] mat = new float[16];
@@ -76,7 +98,6 @@ public class View {
             buffer.flip();
             glMultMatrix(buffer);
             body.getList().call();
-            glEnd();
             glPopMatrix();
         });
         Display.update();
@@ -85,11 +106,15 @@ public class View {
         }
     }
 
-    public void setStopRequested(boolean stopRequested) {
-        this.stopRequested = stopRequested;
-    }
-
     public boolean isStopRequested() {
         return stopRequested;
+    }
+
+    public Camera getCamera() {
+        return camera;
+    }
+
+    public void setStopRequested(boolean stopRequested) {
+        this.stopRequested = stopRequested;
     }
 }

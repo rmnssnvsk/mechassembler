@@ -1,12 +1,15 @@
-package util.builder;
+package model.builder;
 
-import com.bulletphysics.collision.shapes.BoxShape;
 import com.bulletphysics.collision.shapes.CollisionShape;
+import com.bulletphysics.collision.shapes.SphereShape;
 import com.bulletphysics.dynamics.RigidBody;
 import com.bulletphysics.dynamics.RigidBodyConstructionInfo;
 import com.bulletphysics.linearmath.DefaultMotionState;
 import com.bulletphysics.linearmath.Transform;
 import model.Body;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.util.glu.GLU;
+import org.lwjgl.util.glu.Sphere;
 import util.DisplayList;
 
 import javax.vecmath.Matrix4f;
@@ -14,92 +17,114 @@ import javax.vecmath.Quat4f;
 import javax.vecmath.Vector3f;
 
 /**
- * Created on 10/21/14.
+ * Created on 10/22/14.
  *
  * @author Mike Sorokin
  */
-public class BodyBuilder {
+public class SphereBodyBuilder {
     private float mass = 1;
     private float restitution = .1f;
     private float friction = .1f;
-    private float angularDamping = 0;
+    private float radius = 1;
     private Vector3f pos = new Vector3f(0, 0, 0);
     private Vector3f rot = new Vector3f(0, 0, 0);
-    private CollisionShape shape = new BoxShape(new Vector3f(1, 1, 1));
-    private DisplayList list = new DisplayList(() -> {});
+    private Vector3f color = new Vector3f(.5f, .5f, .5f);
 
-    public BodyBuilder setMass(float mass) {
+    public SphereBodyBuilder setMass(float mass) {
         this.mass = mass;
         return this;
     }
 
-    public BodyBuilder setRestitution(float restitution) {
+    public SphereBodyBuilder setRestitution(float restitution) {
         this.restitution = restitution;
         return this;
     }
 
-    public BodyBuilder setFriction(float friction) {
+    public SphereBodyBuilder setFriction(float friction) {
         this.friction = friction;
         return this;
     }
 
-    public BodyBuilder setAngularDamping(float angularDamping) {
-        this.angularDamping = angularDamping;
+    public SphereBodyBuilder setRadius(float radius) {
+        this.radius = radius;
         return this;
     }
 
-    public BodyBuilder setPos(Vector3f pos) {
+    public SphereBodyBuilder setPos(Vector3f pos) {
         this.pos = pos;
         return this;
     }
 
-    public BodyBuilder setPosX(float x) {
+    public SphereBodyBuilder setPosX(float x) {
         this.pos.x = x;
         return this;
     }
 
-    public BodyBuilder setPosY(float y) {
+    public SphereBodyBuilder setPosY(float y) {
         this.pos.y = y;
         return this;
     }
 
-    public BodyBuilder setPosZ(float z) {
+    public SphereBodyBuilder setPosZ(float z) {
         this.pos.z = z;
         return this;
     }
 
-    public BodyBuilder setRot(Vector3f rot) {
+    public SphereBodyBuilder setRot(Vector3f rot) {
         this.rot = rot;
         return this;
     }
 
-    public BodyBuilder setRotX(float x) {
+    public SphereBodyBuilder setRotX(float x) {
+        //FIXME
         this.rot.x = x;
         return this;
     }
 
-    public BodyBuilder setRotY(float y) {
+    public SphereBodyBuilder setRotY(float y) {
+        //FIXME
         this.rot.y = y;
         return this;
     }
 
-    public BodyBuilder setRotZ(float z) {
+    public SphereBodyBuilder setRotZ(float z) {
+        //FIXME
         this.rot.z = z;
         return this;
     }
 
-    public BodyBuilder setCollisionShape(CollisionShape shape) {
-        this.shape = shape;
+    public SphereBodyBuilder setColor(Vector3f color) {
+        this.color = color;
         return this;
     }
 
-    public BodyBuilder setDisplayList(Runnable list) {
-        this.list = new DisplayList(list);
+    public SphereBodyBuilder setColorR(float r) {
+        this.color.x = r;
+        return this;
+    }
+
+    public SphereBodyBuilder setColorG(float g) {
+        this.color.y = g;
+        return this;
+    }
+
+    public SphereBodyBuilder setColorZ(float b) {
+        this.color.z = b;
         return this;
     }
 
     public Body build() {
         Vector3f inertia = new Vector3f(0, 0, 0);
+        CollisionShape shape = new SphereShape(radius);
+        DisplayList list = new DisplayList(() -> {
+            Sphere sphere = new Sphere();
+            GL11.glColor3f(0, 0, 0);
+            sphere.setDrawStyle(GLU.GLU_SILHOUETTE);
+            sphere.draw(radius, 20, 20);
+            GL11.glColor3f(color.x, color.y, color.z);
+            sphere.setDrawStyle(GLU.GLU_FILL);
+            sphere.draw(radius, 20, 20);
+        });
         shape.calculateLocalInertia(mass, inertia);
         RigidBodyConstructionInfo info = new RigidBodyConstructionInfo(
                 mass,
@@ -113,7 +138,6 @@ public class BodyBuilder {
         );
         info.restitution = restitution;
         info.friction = friction;
-        info.angularDamping = angularDamping;
         return new Body(
                 new RigidBody(info),
                 list
