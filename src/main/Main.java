@@ -51,6 +51,7 @@ public class Main {
                 .setX(1366)
                 .setY(768)
                 .setFullscreen(true)
+                .setMouseGrabbed(true)
                 .setTitle("Mechassembler")
                 .setCamera(camera)
                 .setProgram("light")

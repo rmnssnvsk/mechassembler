@@ -16,6 +16,7 @@ public class ViewBuilder {
     private boolean fullscreen = false;
     private boolean vSync = false;
     private boolean resizable = false;
+    private boolean mouseGrabbed = false;
     private String title = "Window";
     private Camera camera = new CameraBuilder().build();
     private String program = null;
@@ -45,6 +46,11 @@ public class ViewBuilder {
         return this;
     }
 
+    public ViewBuilder setMouseGrabbed(boolean mouseGrabbed) {
+        this.mouseGrabbed = mouseGrabbed;
+        return this;
+    }
+
     public ViewBuilder setTitle(String title) {
         this.title = title;
         return this;
@@ -61,6 +67,6 @@ public class ViewBuilder {
     }
 
     public View build() {
-        return new View(new DisplayMode(x, y), fullscreen, vSync, resizable, title, camera, program);
+        return new View(new DisplayMode(x, y), fullscreen, vSync, resizable, mouseGrabbed, title, camera, program);
     }
 }

@@ -6,6 +6,7 @@ import model.Body;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Keyboard;
+import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.util.glu.GLU;
@@ -30,13 +31,14 @@ public class View {
     /**
      * Создает и инициализирует представление.
      */
-    public View(DisplayMode displayMode, boolean fullscreen, boolean vSync, boolean resizable, String title, Camera camera, String program) {
+    public View(DisplayMode displayMode, boolean fullscreen, boolean vSync, boolean resizable, boolean mouseGrabbed, String title, Camera camera, String program) {
         try {
             if (!fullscreen)
                 Display.setDisplayMode(displayMode);
             Display.setFullscreen(fullscreen);
             Display.setVSyncEnabled(vSync);
             Display.setResizable(resizable);
+            Mouse.setGrabbed(mouseGrabbed);
             Display.setTitle(title);
             Display.create();
         } catch (LWJGLException e) {
