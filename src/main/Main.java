@@ -12,13 +12,16 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.glu.GLU;
 import org.lwjgl.util.glu.Sphere;
 import model.builder.BodyBuilder;
+import org.newdawn.slick.opengl.Texture;
 import util.Program;
+import util.TextureLoader;
 import view.Camera;
 import view.builder.CameraBuilder;
 import view.builder.ViewBuilder;
 import view.View;
 
 import javax.vecmath.Vector3f;
+import java.io.IOException;
 
 /**
  * <p>
@@ -41,7 +44,7 @@ public class Main {
      */
     public static void main(String[] args) {
         Camera camera = new CameraBuilder()
-                .setPos(new Vector3f(0, -30, -30))
+                .setPos(new Vector3f(0, -30, -60))
                 .setRot(new Vector3f(60, 90, 0))
                 .setAspect(1366 / 768f)
                 .setControllable(true)
@@ -57,23 +60,25 @@ public class Main {
                 .setProgram("light")
                 .build();
         Controller controller = new Controller(model, view);
+        model.addObserver(controller);
+        view.addObserver(controller);
+        Texture ballTexture = TextureLoader.load("basketball");
+        Texture boxTexture = TextureLoader.load("brick");
         Body ball = new SphereBodyBuilder()
-                .setMass(1)
                 .setRestitution(.5f)
                 .setFriction(.7f)
                 .setPosY(10)
                 .setRadius(3)
-                .setColor(new Vector3f(1, 0, 0))
+                .setTexture(ballTexture)
                 .build();
         Body ball2 = new SphereBodyBuilder()
-                .setMass(1)
                 .setRestitution(.5f)
                 .setFriction(.7f)
                 .setPosX(5)
                 .setPosY(20)
                 .setPosZ(1)
                 .setRadius(3)
-                .setColor(new Vector3f(0, 1, 0))
+                .setTexture(ballTexture)
                 .build();
         Body plane = new BodyBuilder()
                 .setMass(0)
@@ -81,8 +86,8 @@ public class Main {
                 .setFriction(.7f)
                 .setCollisionShape(new StaticPlaneShape(new Vector3f(0, 1, 0), 0))
                 .setDisplayList(() -> {
+                    GL11.glBindTexture(GL11.GL_TEXTURE_2D, TextureLoader.NO_TEXTURE.getTextureID());
                     GL11.glBegin(GL11.GL_QUADS);
-                    GL11.glColor3f(.7f, .7f, .7f);
                     GL11.glNormal3f(0, 1, 0);
                     GL11.glVertex3f(-50, 0, -50);
                     GL11.glVertex3f(50, 0, -50);
@@ -92,19 +97,17 @@ public class Main {
                 })
                 .build();
         Body box = new BoxBodyBuilder()
-                .setMass(1)
                 .setFriction(1)
                 .setRestitution(.1f)
                 .setPosX(5)
-                .setPosY(2)
+                .setPosY(3)
                 .setSize(new Vector3f(5, 2, 1))
-                .setColor(new Vector3f(0, 0, 1))
+                .setTexture(boxTexture)
                 .build();
-        controller.addBody(ball);
-        controller.addBody(ball2);
-        controller.addBody(box);
-        controller.addBody(plane);
-        controller.startSimulation();
-        controller.delete();
+        model.addBody(ball);
+        model.addBody(ball2);
+        model.addBody(plane);
+        model.addBody(box);
+        model.start();
     }
 }

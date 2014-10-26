@@ -1,6 +1,10 @@
 package util;
 
+import org.lwjgl.BufferUtils;
+import org.lwjgl.opengl.GL11;
+
 import java.io.IOException;
+import java.nio.IntBuffer;
 
 import static org.lwjgl.opengl.GL20.*;
 
@@ -20,6 +24,9 @@ public class Program {
         }
         glLinkProgram(program);
         glValidateProgram(program);
+        IntBuffer buffer = BufferUtils.createIntBuffer(1);
+        glGetProgram(program, GL_VALIDATE_STATUS, buffer);
+        assert buffer.get() == GL11.GL_TRUE : "Program was not be able to compile correctly";
     }
 
     public static void useDefault() {

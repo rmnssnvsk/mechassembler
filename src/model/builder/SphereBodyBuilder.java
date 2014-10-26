@@ -7,14 +7,17 @@ import com.bulletphysics.dynamics.RigidBodyConstructionInfo;
 import com.bulletphysics.linearmath.DefaultMotionState;
 import com.bulletphysics.linearmath.Transform;
 import model.Body;
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.util.glu.GLU;
-import org.lwjgl.util.glu.Sphere;
+import org.newdawn.slick.opengl.Texture;
 import util.DisplayList;
+import util.TextureLoader;
 
 import javax.vecmath.Matrix4f;
 import javax.vecmath.Quat4f;
 import javax.vecmath.Vector3f;
+
+import static java.lang.Math.*;
+import static java.lang.Math.toRadians;
+import static org.lwjgl.opengl.GL11.*;
 
 /**
  * Created on 10/22/14.
@@ -26,9 +29,11 @@ public class SphereBodyBuilder {
     private float restitution = .1f;
     private float friction = .1f;
     private float radius = 1;
+    private float angularDamping = .3f;
+    private Texture texture = TextureLoader.NO_TEXTURE;
     private Vector3f pos = new Vector3f(0, 0, 0);
     private Vector3f rot = new Vector3f(0, 0, 0);
-    private Vector3f color = new Vector3f(.5f, .5f, .5f);
+    private Vector3f color = new Vector3f(1, 1, 1);
 
     public SphereBodyBuilder setMass(float mass) {
         this.mass = mass;
@@ -42,6 +47,11 @@ public class SphereBodyBuilder {
 
     public SphereBodyBuilder setFriction(float friction) {
         this.friction = friction;
+        return this;
+    }
+
+    public SphereBodyBuilder setAngularDamping(float angularDamping) {
+        this.angularDamping = angularDamping;
         return this;
     }
 
@@ -113,17 +123,51 @@ public class SphereBodyBuilder {
         return this;
     }
 
+    public SphereBodyBuilder setTexture(Texture texture) {
+        this.texture = texture;
+        return this;
+    }
+
     public Body build() {
         Vector3f inertia = new Vector3f(0, 0, 0);
         CollisionShape shape = new SphereShape(radius);
         DisplayList list = new DisplayList(() -> {
-            Sphere sphere = new Sphere();
-            GL11.glColor3f(0, 0, 0);
-            sphere.setDrawStyle(GLU.GLU_SILHOUETTE);
-            sphere.draw(radius, 20, 20);
-            GL11.glColor3f(color.x, color.y, color.z);
-            sphere.setDrawStyle(GLU.GLU_FILL);
-            sphere.draw(radius, 20, 20);
+            glColor3f(color.x, color.y, color.z);
+            glBindTexture(GL_TEXTURE_2D, texture.getTextureID());
+            glBegin(GL_QUADS);
+            int heightPolygons = 40;
+            int widthPolygons = 40;
+            for (float beta = 0; beta < 180; beta += 180f / heightPolygons) {
+                for (float alpha = 0; alpha < 360; alpha += 360f / widthPolygons) {
+                    float x, y, z;
+                    x = (float) (sin(toRadians(beta)) * cos(toRadians(alpha)));
+                    y = (float) (cos(toRadians(beta)));
+                    z = (float) (sin(toRadians(beta)) * sin(toRadians(alpha)));
+                    glTexCoord2f(alpha / 360, beta / 180);
+                    glNormal3f(x, y, z);
+                    glVertex3f(x * radius, y * radius, z * radius);
+                    x = (float) (sin(toRadians(beta + 180f / heightPolygons)) * cos(toRadians(alpha)));
+                    y = (float) (cos(toRadians(beta + 180f / heightPolygons)));
+                    z = (float) (sin(toRadians(beta + 180f / heightPolygons)) * sin(toRadians(alpha)));
+                    glTexCoord2f(alpha / 360, (beta + 180f / heightPolygons) / 180);
+                    glNormal3f(x, y, z);
+                    glVertex3f(x * radius, y * radius, z * radius);
+                    x = (float) (sin(toRadians(beta + 180f / heightPolygons)) * cos(toRadians(alpha + 360f / widthPolygons)));
+                    y = (float) (cos(toRadians(beta + 180f / heightPolygons)));
+                    z = (float) (sin(toRadians(beta + 180f / heightPolygons)) * sin(toRadians(alpha + 360f / widthPolygons)));
+                    glTexCoord2f((alpha + 360f / widthPolygons) / 360, (beta + 180f / heightPolygons) / 180);
+                    glNormal3f(x, y, z);
+                    glVertex3f(x * radius, y * radius, z * radius);
+                    x = (float) (sin(toRadians(beta)) * cos(toRadians(alpha + 360f / widthPolygons)));
+                    y = (float) (cos(toRadians(beta)));
+                    z = (float) (sin(toRadians(beta)) * sin(toRadians(alpha + 360f / widthPolygons)));
+                    glTexCoord2f((alpha + 360f / widthPolygons) / 360, beta / 180);
+                    glNormal3f(x, y, z);
+                    glVertex3f(x * radius, y * radius, z * radius);
+                }
+            }
+            glEnd();
+            glEnd();
         });
         shape.calculateLocalInertia(mass, inertia);
         RigidBodyConstructionInfo info = new RigidBodyConstructionInfo(
@@ -138,6 +182,7 @@ public class SphereBodyBuilder {
         );
         info.restitution = restitution;
         info.friction = friction;
+        info.angularDamping = angularDamping;
         return new Body(
                 new RigidBody(info),
                 list

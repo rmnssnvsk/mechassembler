@@ -1,36 +1,39 @@
 package view;
 
+import com.bulletphysics.dynamics.DynamicsWorld;
 import com.bulletphysics.linearmath.Transform;
-import com.sun.istack.internal.Nullable;
 import model.Body;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.LWJGLException;
+import org.lwjgl.Sys;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
-import org.lwjgl.util.glu.GLU;
-import util.DisplayList;
+import org.lwjgl.opengl.GL20;
 import util.Program;
+import view.event.ViewEvent;
+import view.event.CloseRequestedViewEvent;
 
 import java.nio.FloatBuffer;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Observable;
 
 import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL11.GL_LINEAR;
+import static org.lwjgl.opengl.GL20.*;
 
 /**
  * Класс представления. Представление умеет визуализировать симуляцию.
  *
  * @author Mike Sorokin
  */
-public class View {
-    private boolean stopRequested = false;
+public class View extends Observable {
     private Camera camera;
     private Program program = null;
 
-    /**
-     * Создает и инициализирует представление.
-     */
     public View(DisplayMode displayMode, boolean fullscreen, boolean vSync, boolean resizable, boolean mouseGrabbed, String title, Camera camera, String program) {
         try {
             if (!fullscreen)
@@ -51,12 +54,13 @@ public class View {
         glLight(GL_LIGHT0, GL_AMBIENT, asFloatBuffer(.3f, .3f, .3f, 1));
         glLight(GL_LIGHT0, GL_DIFFUSE, asFloatBuffer(1, 1, 1, 1));
         glLight(GL_LIGHT0, GL_SPECULAR, asFloatBuffer(10, 10, 10, 1));
-        glLight(GL_LIGHT0, GL_POSITION, asFloatBuffer(100, 10, 10, 1));
+        glLight(GL_LIGHT0, GL_POSITION, asFloatBuffer(0, 0, 60, 1));
         glMaterial(GL_FRONT, GL_AMBIENT, asFloatBuffer(1, 1, 1, 1));
         glMaterial(GL_FRONT, GL_DIFFUSE, asFloatBuffer(1, 1, 1, 1));
         glMaterial(GL_FRONT, GL_SPECULAR, asFloatBuffer(1, 1, 1, 1));
         glMaterialf(GL_FRONT, GL_SHININESS, 128);
         glDepthFunc(GL_LESS);
+        glShadeModel(GL_SMOOTH);
         if (program == null) {
             Program.useDefault();
         } else {
@@ -91,6 +95,14 @@ public class View {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glLoadIdentity();
         camera.applyViewMatrix();
+        FloatBuffer viewMatrixReadBuffer = BufferUtils.createFloatBuffer(16);
+        glGetFloat(GL_MODELVIEW_MATRIX, viewMatrixReadBuffer);
+        float[] viewMatrix = new float[16];
+        viewMatrixReadBuffer.get(viewMatrix);
+        FloatBuffer viewMatrixWriteBuffer = BufferUtils.createFloatBuffer(16);
+        viewMatrixWriteBuffer.put(viewMatrix);
+        viewMatrixWriteBuffer.flip();
+        glUniformMatrix4(glGetUniformLocation(program.program, "viewMatrix"), false, viewMatrixWriteBuffer);
         bodies.stream().forEach(body -> {
             glPushMatrix();
             float[] mat = new float[16];
@@ -103,20 +115,15 @@ public class View {
             glPopMatrix();
         });
         Display.update();
+        List<ViewEvent> events = new ArrayList<>();
         if (Keyboard.isKeyDown(Keyboard.KEY_ESCAPE) || Display.isCloseRequested()) {
-            stopRequested = true;
+            events.add(new CloseRequestedViewEvent(this));
         }
-    }
-
-    public boolean isStopRequested() {
-        return stopRequested;
+        setChanged();
+        notifyObservers(events);
     }
 
     public Camera getCamera() {
         return camera;
-    }
-
-    public void setStopRequested(boolean stopRequested) {
-        this.stopRequested = stopRequested;
     }
 }

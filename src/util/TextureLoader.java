@@ -10,7 +10,14 @@ import java.io.IOException;
  * @author Mike Sorokin
  */
 public class TextureLoader {
-    public static Texture load(String name) throws IOException {
-        return org.newdawn.slick.opengl.TextureLoader.getTexture("PNG", new FileInputStream("res/textures/" + name + ".png"));
+    public static final Texture NO_TEXTURE = load("notexture");
+
+    public static Texture load(String name) {
+        try {
+            return org.newdawn.slick.opengl.TextureLoader.getTexture("PNG", new FileInputStream("res/textures/" + name + ".png"));
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }

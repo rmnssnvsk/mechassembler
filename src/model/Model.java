@@ -4,6 +4,7 @@ import com.bulletphysics.collision.broadphase.BroadphaseInterface;
 import com.bulletphysics.collision.broadphase.DbvtBroadphase;
 import com.bulletphysics.collision.dispatch.CollisionConfiguration;
 import com.bulletphysics.collision.dispatch.CollisionDispatcher;
+import com.bulletphysics.collision.dispatch.CollisionObjectType;
 import com.bulletphysics.collision.dispatch.DefaultCollisionConfiguration;
 import com.bulletphysics.dynamics.DiscreteDynamicsWorld;
 import com.bulletphysics.dynamics.DynamicsWorld;
@@ -15,6 +16,7 @@ import view.Camera;
 import javax.vecmath.Vector3f;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Observable;
 
 /**
  * Класс модели. Модель содержит в себе всю информацию о симуляции и умеет обновлять
@@ -22,7 +24,7 @@ import java.util.List;
  *
  * @author Mike Sorokin
  */
-public class Model {
+public class Model extends Observable {
     /**
      * Вектор ускорения свободного падения по умолчанию.
      */
@@ -39,6 +41,7 @@ public class Model {
     private List<Body> bodies;
 
     private Camera camera;
+    private boolean stopRequested = false;
 
     /**
      * Создает и инициализирует модель. В качестве векора ускорения свободгого падения
@@ -63,13 +66,30 @@ public class Model {
         world.setGravity(gravity);
     }
 
+    public void start() {
+        stopRequested = false;
+        double lastFrame = System.currentTimeMillis() / 1000d;
+        while (!stopRequested) {
+            double currentTime = System.currentTimeMillis() / 1000d;
+            float delta = (float) (currentTime - lastFrame);
+            lastFrame = currentTime;
+            update(delta);
+        }
+    }
+
+    public void stop() {
+        stopRequested = true;
+    }
+
     /**
      * Обновляет состояние симуляции.
      * @param t промежуток времени в секундах.
      */
-    public void update(float t) {
+    private void update(float t) {
         camera.update(t);
         world.stepSimulation(t);
+        setChanged();
+        notifyObservers(bodies);
     }
 
     /**

@@ -7,6 +7,7 @@ import com.bulletphysics.dynamics.RigidBodyConstructionInfo;
 import com.bulletphysics.linearmath.DefaultMotionState;
 import com.bulletphysics.linearmath.Transform;
 import model.Body;
+import org.newdawn.slick.opengl.Texture;
 import util.DisplayList;
 
 import javax.vecmath.Matrix4f;

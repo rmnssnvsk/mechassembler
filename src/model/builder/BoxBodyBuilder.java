@@ -12,11 +12,15 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.glu.GLU;
 import org.lwjgl.util.glu.Quadric;
 import org.lwjgl.util.glu.Sphere;
+import org.newdawn.slick.opengl.Texture;
 import util.DisplayList;
+import util.TextureLoader;
 
 import javax.vecmath.Matrix4f;
 import javax.vecmath.Quat4f;
 import javax.vecmath.Vector3f;
+
+import static org.lwjgl.opengl.GL11.*;
 
 /**
  * Created on 10/22/14.
@@ -27,10 +31,11 @@ public class BoxBodyBuilder {
     private float mass = 1;
     private float restitution = .1f;
     private float friction = .1f;
+    private Texture texture = TextureLoader.NO_TEXTURE;
     private Vector3f size = new Vector3f(1, 1, 1);
     private Vector3f pos = new Vector3f(0, 0, 0);
     private Vector3f rot = new Vector3f(0, 0, 0);
-    private Vector3f color = new Vector3f(.5f, .5f, .5f);
+    private Vector3f color = new Vector3f(1, 1, 1);
 
     public BoxBodyBuilder setMass(float mass) {
         this.mass = mass;
@@ -131,43 +136,73 @@ public class BoxBodyBuilder {
         return this;
     }
 
+    public BoxBodyBuilder setTexture(Texture texture) {
+        this.texture = texture;
+        return this;
+    }
+
     public Body build() {
         Vector3f inertia = new Vector3f(0, 0, 0);
         CollisionShape shape = new BoxShape(size);
         DisplayList list = new DisplayList(() -> {
-            GL11.glBegin(GL11.GL_QUADS);
-            GL11.glColor3f(color.x, color.y, color.z);
-            GL11.glNormal3f(0, 0, -1);
-            GL11.glVertex3f(-size.x, -size.y, -size.z);
-            GL11.glVertex3f(-size.x, +size.y, -size.z);
-            GL11.glVertex3f(+size.x, +size.y, -size.z);
-            GL11.glVertex3f(+size.x, -size.y, -size.z);
-            GL11.glNormal3f(0, 0, +1);
-            GL11.glVertex3f(-size.x, -size.y, +size.z);
-            GL11.glVertex3f(-size.x, +size.y, +size.z);
-            GL11.glVertex3f(+size.x, +size.y, +size.z);
-            GL11.glVertex3f(+size.x, -size.y, +size.z);
-            GL11.glNormal3f(0, -1, 0);
-            GL11.glVertex3f(-size.x, -size.y, -size.z);
-            GL11.glVertex3f(-size.x, -size.y, +size.z);
-            GL11.glVertex3f(+size.x, -size.y, +size.z);
-            GL11.glVertex3f(+size.x, -size.y, -size.z);
-            GL11.glNormal3f(0, +1, 0);
-            GL11.glVertex3f(-size.x, +size.y, -size.z);
-            GL11.glVertex3f(-size.x, +size.y, +size.z);
-            GL11.glVertex3f(+size.x, +size.y, +size.z);
-            GL11.glVertex3f(+size.x, +size.y, -size.z);
-            GL11.glNormal3f(-1, 0, 0);
-            GL11.glVertex3f(-size.x, -size.y, -size.z);
-            GL11.glVertex3f(-size.x, -size.y, +size.z);
-            GL11.glVertex3f(-size.x, +size.y, +size.z);
-            GL11.glVertex3f(-size.x, +size.y, -size.z);
-            GL11.glNormal3f(+1, 0, 0);
-            GL11.glVertex3f(+size.x, -size.y, -size.z);
-            GL11.glVertex3f(+size.x, -size.y, +size.z);
-            GL11.glVertex3f(+size.x, +size.y, +size.z);
-            GL11.glVertex3f(+size.x, +size.y, -size.z);
-            GL11.glEnd();
+            glBindTexture(GL_TEXTURE_2D, texture.getTextureID());
+            glBegin(GL11.GL_QUADS);
+            glColor3f(color.x, color.y, color.z);
+            glNormal3f(0, 0, -1);
+            glTexCoord2f(0, 0);
+            glVertex3f(-size.x, -size.y, -size.z);
+            glTexCoord2f(0, 1);
+            glVertex3f(-size.x, +size.y, -size.z);
+            glTexCoord2f(1, 1);
+            glVertex3f(+size.x, +size.y, -size.z);
+            glTexCoord2f(1, 0);
+            glVertex3f(+size.x, -size.y, -size.z);
+            glNormal3f(0, 0, +1);
+            glTexCoord2f(0, 0);
+            glVertex3f(-size.x, -size.y, +size.z);
+            glTexCoord2f(0, 1);
+            glVertex3f(-size.x, +size.y, +size.z);
+            glTexCoord2f(1, 1);
+            glVertex3f(+size.x, +size.y, +size.z);
+            glTexCoord2f(1, 0);
+            glVertex3f(+size.x, -size.y, +size.z);
+            glNormal3f(0, -1, 0);
+            glTexCoord2f(0, 0);
+            glVertex3f(-size.x, -size.y, -size.z);
+            glTexCoord2f(0, 1);
+            glVertex3f(-size.x, -size.y, +size.z);
+            glTexCoord2f(1, 1);
+            glVertex3f(+size.x, -size.y, +size.z);
+            glTexCoord2f(1, 0);
+            glVertex3f(+size.x, -size.y, -size.z);
+            glNormal3f(0, +1, 0);
+            glTexCoord2f(0, 0);
+            glVertex3f(-size.x, +size.y, -size.z);
+            glTexCoord2f(0, 1);
+            glVertex3f(-size.x, +size.y, +size.z);
+            glTexCoord2f(1, 1);
+            glVertex3f(+size.x, +size.y, +size.z);
+            glTexCoord2f(1, 0);
+            glVertex3f(+size.x, +size.y, -size.z);
+            glNormal3f(-1, 0, 0);
+            glTexCoord2f(0, 0);
+            glVertex3f(-size.x, -size.y, -size.z);
+            glTexCoord2f(0, 1);
+            glVertex3f(-size.x, -size.y, +size.z);
+            glTexCoord2f(1, 1);
+            glVertex3f(-size.x, +size.y, +size.z);
+            glTexCoord2f(1, 0);
+            glVertex3f(-size.x, +size.y, -size.z);
+            glNormal3f(+1, 0, 0);
+            glTexCoord2f(0, 0);
+            glVertex3f(+size.x, -size.y, -size.z);
+            glTexCoord2f(0, 1);
+            glVertex3f(+size.x, -size.y, +size.z);
+            glTexCoord2f(1, 1);
+            glVertex3f(+size.x, +size.y, +size.z);
+            glTexCoord2f(1, 0);
+            glVertex3f(+size.x, +size.y, -size.z);
+            glEnd();
         });
         shape.calculateLocalInertia(mass, inertia);
         RigidBodyConstructionInfo info = new RigidBodyConstructionInfo(

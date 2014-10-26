@@ -4,7 +4,10 @@ import com.bulletphysics.collision.shapes.CollisionShape;
 import com.bulletphysics.dynamics.RigidBody;
 import com.bulletphysics.dynamics.RigidBodyConstructionInfo;
 import com.bulletphysics.linearmath.MotionState;
+import org.lwjgl.Sys;
+import org.lwjgl.opengl.GL11;
 import org.newdawn.slick.UnicodeFont;
+import org.newdawn.slick.opengl.Texture;
 import util.DisplayList;
 
 import javax.vecmath.Vector3f;
@@ -27,16 +30,8 @@ public class Body {
         return rigidBody;
     }
 
-    public void setRigidBody(RigidBody rigidBody) {
-        this.rigidBody = rigidBody;
-    }
-
     public DisplayList getList() {
         return list;
-    }
-
-    public void setList(DisplayList list) {
-        this.list = list;
     }
 
     public void delete() {
