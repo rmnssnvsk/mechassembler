@@ -11,6 +11,7 @@ import static org.lwjgl.opengl.GL20.*;
 public class Program {
     private Shader vertex, fragment;
     public final int program;
+    private static Program dummy;
 
     public Program(String shaderName) {
         program = glCreateProgram();
@@ -29,8 +30,11 @@ public class Program {
         assert buffer.get() == GL11.GL_TRUE : "Program was not be able to compile correctly";
     }
 
-    public static void useDefault() {
-        glUseProgram(0);
+    public static void useDummy() {
+        if (dummy == null) {
+            dummy = new Program("dummy");
+        }
+        dummy.use();
     }
 
     public void use() {

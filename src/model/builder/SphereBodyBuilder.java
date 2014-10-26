@@ -167,7 +167,6 @@ public class SphereBodyBuilder {
                 }
             }
             glEnd();
-            glEnd();
         });
         shape.calculateLocalInertia(mass, inertia);
         RigidBodyConstructionInfo info = new RigidBodyConstructionInfo(

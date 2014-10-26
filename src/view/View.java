@@ -12,9 +12,11 @@ import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.GL20;
 import util.Program;
+import util.TextureLoader;
 import view.event.ViewEvent;
 import view.event.CloseRequestedViewEvent;
 
+import javax.vecmath.Vector3f;
 import java.nio.FloatBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -50,7 +52,6 @@ public class View extends Observable {
         this.camera = camera;
         camera.applyProjectionMatrix();
         glEnable(GL_DEPTH_TEST);
-        glDepthFunc(GL_LEQUAL);
         glLight(GL_LIGHT0, GL_AMBIENT, asFloatBuffer(.3f, .3f, .3f, 1));
         glLight(GL_LIGHT0, GL_DIFFUSE, asFloatBuffer(1, 1, 1, 1));
         glLight(GL_LIGHT0, GL_SPECULAR, asFloatBuffer(10, 10, 10, 1));
@@ -59,13 +60,12 @@ public class View extends Observable {
         glMaterial(GL_FRONT, GL_DIFFUSE, asFloatBuffer(1, 1, 1, 1));
         glMaterial(GL_FRONT, GL_SPECULAR, asFloatBuffer(1, 1, 1, 1));
         glMaterialf(GL_FRONT, GL_SHININESS, 128);
-        glDepthFunc(GL_LESS);
+        glDepthFunc(GL_LEQUAL);
         glShadeModel(GL_SMOOTH);
         if (program == null) {
-            Program.useDefault();
+            Program.useDummy();
         } else {
             this.program = new Program(program);
-            this.program.use();
         }
     }
 
@@ -95,6 +95,7 @@ public class View extends Observable {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glLoadIdentity();
         camera.applyViewMatrix();
+        program.use();
         FloatBuffer viewMatrixReadBuffer = BufferUtils.createFloatBuffer(16);
         glGetFloat(GL_MODELVIEW_MATRIX, viewMatrixReadBuffer);
         float[] viewMatrix = new float[16];
@@ -113,6 +114,33 @@ public class View extends Observable {
             glMultMatrix(buffer);
             body.getList().call();
             glPopMatrix();
+        });
+        Program.useDummy();
+        glClear(GL_DEPTH_BUFFER_BIT);
+        glBegin(GL_LINES);
+        glColor3f(1, 0, 0);
+        glVertex3f(-1000, 0, 0);
+        glVertex3f(+1000, 0, 0);
+        glColor3f(0, 1, 0);
+        glVertex3f(0, -1000, 0);
+        glVertex3f(0, +1000, 0);
+        glColor3f(0, 0, 1);
+        glVertex3f(0, 0, -1000);
+        glVertex3f(0, 0, +1000);
+        glEnd();
+        bodies.stream().forEach(body -> {
+            Vector3f c = body.getRigidBody().getWorldTransform(new Transform()).origin;
+            glBegin(GL_LINES);
+            glColor3f(1, 0, 0);
+            glVertex3f(c.x, c.y, c.z);
+            glVertex3f(c.x, 0, 0);
+            glColor3f(0, 1, 0);
+            glVertex3f(c.x, c.y, c.z);
+            glVertex3f(0, c.y, 0);
+            glColor3f(0, 0, 1);
+            glVertex3f(c.x, c.y, c.z);
+            glVertex3f(0, 0, c.z);
+            glEnd();
         });
         Display.update();
         List<ViewEvent> events = new ArrayList<>();

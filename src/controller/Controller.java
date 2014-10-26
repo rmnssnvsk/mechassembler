@@ -26,8 +26,7 @@ public class Controller implements Observer {
     @Override
     public void update(Observable o, Object arg) {
         if (o instanceof Model) {
-            List<Body> bodies = (List<Body>) arg;
-            view.show(bodies);
+            view.show(model.getBodies());
         } else {
             List<ViewEvent> events = (List<ViewEvent>) arg;
             events.stream().filter(event -> event instanceof CloseRequestedViewEvent).forEach(event -> {

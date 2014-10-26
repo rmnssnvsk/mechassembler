@@ -89,7 +89,7 @@ public class Model extends Observable {
         camera.update(t);
         world.stepSimulation(t);
         setChanged();
-        notifyObservers(bodies);
+        notifyObservers();
     }
 
     /**

@@ -87,6 +87,7 @@ public class Main {
                 .setCollisionShape(new StaticPlaneShape(new Vector3f(0, 1, 0), 0))
                 .setDisplayList(() -> {
                     GL11.glBindTexture(GL11.GL_TEXTURE_2D, TextureLoader.NO_TEXTURE.getTextureID());
+                    GL11.glColor3f(1, 1, 1);
                     GL11.glBegin(GL11.GL_QUADS);
                     GL11.glNormal3f(0, 1, 0);
                     GL11.glVertex3f(-50, 0, -50);
