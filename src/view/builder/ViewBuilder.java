@@ -20,6 +20,7 @@ public class ViewBuilder {
     private String title = "Window";
     private Camera camera = new CameraBuilder().build();
     private String program = null;
+    private boolean drawAxes = false;
 
     public ViewBuilder setX(int x) {
         this.x = x;
@@ -66,7 +67,12 @@ public class ViewBuilder {
         return this;
     }
 
+    public ViewBuilder setDrawAxes(boolean drawAxes) {
+        this.drawAxes = drawAxes;
+        return this;
+    }
+
     public View build() {
-        return new View(new DisplayMode(x, y), fullscreen, vSync, resizable, mouseGrabbed, title, camera, program);
+        return new View(new DisplayMode(x, y), fullscreen, vSync, resizable, mouseGrabbed, title, camera, program, drawAxes);
     }
 }

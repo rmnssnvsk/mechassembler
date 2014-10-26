@@ -58,6 +58,7 @@ public class Main {
                 .setTitle("Mechassembler")
                 .setCamera(camera)
                 .setProgram("light")
+                .setDrawAxes(true)
                 .build();
         Controller controller = new Controller(model, view);
         model.addObserver(controller);

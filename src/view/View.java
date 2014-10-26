@@ -35,8 +35,9 @@ import static org.lwjgl.opengl.GL20.*;
 public class View extends Observable {
     private Camera camera;
     private Program program = null;
+    boolean drawAxes;
 
-    public View(DisplayMode displayMode, boolean fullscreen, boolean vSync, boolean resizable, boolean mouseGrabbed, String title, Camera camera, String program) {
+    public View(DisplayMode displayMode, boolean fullscreen, boolean vSync, boolean resizable, boolean mouseGrabbed, String title, Camera camera, String program, boolean drawAxes) {
         try {
             if (!fullscreen)
                 Display.setDisplayMode(displayMode);
@@ -67,6 +68,7 @@ public class View extends Observable {
         } else {
             this.program = new Program(program);
         }
+        this.drawAxes = drawAxes;
     }
 
     private FloatBuffer asFloatBuffer(float... floats) {
@@ -115,33 +117,35 @@ public class View extends Observable {
             body.getList().call();
             glPopMatrix();
         });
-        Program.useDummy();
-        glClear(GL_DEPTH_BUFFER_BIT);
-        glBegin(GL_LINES);
-        glColor3f(1, 0, 0);
-        glVertex3f(-1000, 0, 0);
-        glVertex3f(+1000, 0, 0);
-        glColor3f(0, 1, 0);
-        glVertex3f(0, -1000, 0);
-        glVertex3f(0, +1000, 0);
-        glColor3f(0, 0, 1);
-        glVertex3f(0, 0, -1000);
-        glVertex3f(0, 0, +1000);
-        glEnd();
-        bodies.stream().forEach(body -> {
-            Vector3f c = body.getRigidBody().getWorldTransform(new Transform()).origin;
+        if (drawAxes) {
+            Program.useDummy();
+            glClear(GL_DEPTH_BUFFER_BIT);
             glBegin(GL_LINES);
             glColor3f(1, 0, 0);
-            glVertex3f(c.x, c.y, c.z);
-            glVertex3f(c.x, 0, 0);
+            glVertex3f(-1000, 0, 0);
+            glVertex3f(+1000, 0, 0);
             glColor3f(0, 1, 0);
-            glVertex3f(c.x, c.y, c.z);
-            glVertex3f(0, c.y, 0);
+            glVertex3f(0, -1000, 0);
+            glVertex3f(0, +1000, 0);
             glColor3f(0, 0, 1);
-            glVertex3f(c.x, c.y, c.z);
-            glVertex3f(0, 0, c.z);
+            glVertex3f(0, 0, -1000);
+            glVertex3f(0, 0, +1000);
             glEnd();
-        });
+            bodies.stream().forEach(body -> {
+                Vector3f c = body.getRigidBody().getWorldTransform(new Transform()).origin;
+                glBegin(GL_LINES);
+                glColor3f(1, 0, 0);
+                glVertex3f(c.x, c.y, c.z);
+                glVertex3f(c.x, 0, 0);
+                glColor3f(0, 1, 0);
+                glVertex3f(c.x, c.y, c.z);
+                glVertex3f(0, c.y, 0);
+                glColor3f(0, 0, 1);
+                glVertex3f(c.x, c.y, c.z);
+                glVertex3f(0, 0, c.z);
+                glEnd();
+            });
+        }
         Display.update();
         List<ViewEvent> events = new ArrayList<>();
         if (Keyboard.isKeyDown(Keyboard.KEY_ESCAPE) || Display.isCloseRequested()) {
