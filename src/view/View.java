@@ -148,6 +148,17 @@ public class View extends Observable {
         }
         Display.update();
         List<ViewEvent> events = new ArrayList<>();
+
+        if (Keyboard.isKeyDown(Keyboard.KEY_O)) {
+            try {
+                Thread.sleep(50);
+                this.drawAxes = !this.drawAxes;
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
         if (Keyboard.isKeyDown(Keyboard.KEY_ESCAPE) || Display.isCloseRequested()) {
             events.add(new CloseRequestedViewEvent(this));
         }
