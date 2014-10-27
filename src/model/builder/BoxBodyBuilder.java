@@ -8,6 +8,7 @@ import com.bulletphysics.dynamics.RigidBodyConstructionInfo;
 import com.bulletphysics.linearmath.DefaultMotionState;
 import com.bulletphysics.linearmath.Transform;
 import model.Body;
+import model.Material;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.glu.GLU;
 import org.lwjgl.util.glu.Quadric;
@@ -32,6 +33,7 @@ public class BoxBodyBuilder {
     private float restitution = .1f;
     private float friction = .1f;
     private Texture texture = TextureLoader.NO_TEXTURE;
+    private Material material = new MaterialBuilder().build();
     private Vector3f size = new Vector3f(1, 1, 1);
     private Vector3f pos = new Vector3f(0, 0, 0);
     private Vector3f rot = new Vector3f(0, 0, 0);
@@ -141,10 +143,16 @@ public class BoxBodyBuilder {
         return this;
     }
 
+    public BoxBodyBuilder setMaterial(Material material) {
+        this.material = material;
+        return this;
+    }
+
     public Body build() {
         Vector3f inertia = new Vector3f(0, 0, 0);
         CollisionShape shape = new BoxShape(size);
         DisplayList list = new DisplayList(() -> {
+            material.apply();
             glBindTexture(GL_TEXTURE_2D, texture.getTextureID());
             glBegin(GL11.GL_QUADS);
             glColor3f(color.x, color.y, color.z);

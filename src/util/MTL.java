@@ -12,6 +12,7 @@ import java.nio.FloatBuffer;
 import java.util.HashMap;
 
 import static org.lwjgl.opengl.GL11.*;
+import static util.FlippedFloatBuffer.asFloatBuffer;
 
 /**
  * Created on 30.08.2014.
@@ -68,13 +69,6 @@ class MTL {
             Ka = new Vector3f();
             Kd = new Vector3f();
             Ks = new Vector3f();
-        }
-
-        private static FloatBuffer asFloatBuffer(float... value) {
-            FloatBuffer buffer = BufferUtils.createFloatBuffer(value.length);
-            buffer.put(value);
-            buffer.flip();
-            return buffer;
         }
 
         void use() {

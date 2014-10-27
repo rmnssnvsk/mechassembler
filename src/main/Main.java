@@ -5,8 +5,10 @@ import com.bulletphysics.collision.shapes.SphereShape;
 import com.bulletphysics.collision.shapes.StaticPlaneShape;
 import controller.Controller;
 import model.Body;
+import model.Material;
 import model.Model;
 import model.builder.BoxBodyBuilder;
+import model.builder.MaterialBuilder;
 import model.builder.SphereBodyBuilder;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.glu.GLU;
@@ -21,6 +23,7 @@ import view.builder.ViewBuilder;
 import view.View;
 
 import javax.vecmath.Vector3f;
+import javax.vecmath.Vector4f;
 import java.io.IOException;
 
 /**
@@ -65,6 +68,9 @@ public class Main {
         view.addObserver(controller);
         Texture ballTexture = TextureLoader.load("basketball");
         Texture boxTexture = TextureLoader.load("brick");
+        Material plainMaterial = new MaterialBuilder()
+                .setSpecular(new Vector4f(.05f, .05f, .05f, 1))
+                .build();
         Body ball = new SphereBodyBuilder()
                 .setRestitution(.5f)
                 .setFriction(.7f)
@@ -87,6 +93,7 @@ public class Main {
                 .setFriction(.7f)
                 .setCollisionShape(new StaticPlaneShape(new Vector3f(0, 1, 0), 0))
                 .setDisplayList(() -> {
+                    plainMaterial.apply();
                     GL11.glBindTexture(GL11.GL_TEXTURE_2D, TextureLoader.NO_TEXTURE.getTextureID());
                     GL11.glColor3f(1, 1, 1);
                     GL11.glBegin(GL11.GL_QUADS);
@@ -105,6 +112,7 @@ public class Main {
                 .setPosY(3)
                 .setSize(new Vector3f(5, 2, 1))
                 .setTexture(boxTexture)
+                .setMaterial(plainMaterial)
                 .build();
         model.addBody(ball);
         model.addBody(ball2);

@@ -7,6 +7,7 @@ import com.bulletphysics.dynamics.RigidBodyConstructionInfo;
 import com.bulletphysics.linearmath.DefaultMotionState;
 import com.bulletphysics.linearmath.Transform;
 import model.Body;
+import model.Material;
 import org.newdawn.slick.opengl.Texture;
 import util.DisplayList;
 import util.TextureLoader;
@@ -31,6 +32,7 @@ public class SphereBodyBuilder {
     private float radius = 1;
     private float angularDamping = .3f;
     private Texture texture = TextureLoader.NO_TEXTURE;
+    private Material material = new MaterialBuilder().build();
     private Vector3f pos = new Vector3f(0, 0, 0);
     private Vector3f rot = new Vector3f(0, 0, 0);
     private Vector3f color = new Vector3f(1, 1, 1);
@@ -128,10 +130,16 @@ public class SphereBodyBuilder {
         return this;
     }
 
+    public SphereBodyBuilder setMaterial(Material material) {
+        this.material = material;
+        return this;
+    }
+
     public Body build() {
         Vector3f inertia = new Vector3f(0, 0, 0);
         CollisionShape shape = new SphereShape(radius);
         DisplayList list = new DisplayList(() -> {
+            material.apply();
             glColor3f(color.x, color.y, color.z);
             glBindTexture(GL_TEXTURE_2D, texture.getTextureID());
             glBegin(GL_QUADS);
