@@ -18,6 +18,7 @@ import view.event.CloseRequestedViewEvent;
 
 import javax.vecmath.Vector3f;
 import java.nio.FloatBuffer;
+import java.security.Key;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -144,19 +145,15 @@ public class View extends Observable {
         }
         Display.update();
         List<ViewEvent> events = new ArrayList<>();
-
-        if (Keyboard.isKeyDown(Keyboard.KEY_O)) {
-            try {
-                Thread.sleep(50);
-                this.drawAxes = !this.drawAxes;
-                Thread.sleep(100);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+        while (Keyboard.next()) {
+            switch (Keyboard.getEventKey()) {
+                case Keyboard.KEY_ESCAPE:
+                    events.add(new CloseRequestedViewEvent(this));
+                    break;
+                case Keyboard.KEY_O:
+                    this.drawAxes = this.drawAxes ^ Keyboard.getEventKeyState();
+                    break;
             }
-        }
-
-        if (Keyboard.isKeyDown(Keyboard.KEY_ESCAPE) || Display.isCloseRequested()) {
-            events.add(new CloseRequestedViewEvent(this));
         }
         setChanged();
         notifyObservers(events);
