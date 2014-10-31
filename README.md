@@ -1,5 +1,10 @@
 # Mechassembler
 
+## Тезисы
+[Ссылка](http://dds6f.ru/mechassembler/mechassembler/blob/master/doc/Abstracts.md)
+
+Для создания PDF файла использовать - http://www.markdowntopdf.com/
+
 ## Цель работы
 
 Написать проект для учеников 7-10 классов для наглядной демонстрации влияния изменения свойств объектов на их поведение в игровой форме.
