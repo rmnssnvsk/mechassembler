@@ -93,19 +93,19 @@ public class CameraBuilder {
                 public void update(float t) {
                     float speed = Configs.getParamF("playerSpeed") * t;
                     float mouse = Configs.getParamF("mouseSensitivity") * t;
-                    if (Keyboard.isKeyDown(Keyboard.KEY_S)) {
+                    if (Keyboard.isKeyDown(Keyboard.KEY_W)) {
                         pos.x += sin(toRadians(rot.y)) * speed;
                         pos.z -= cos(toRadians(rot.y)) * speed;
                     }
-                    if (Keyboard.isKeyDown(Keyboard.KEY_W)) {
+                    if (Keyboard.isKeyDown(Keyboard.KEY_S)) {
                         pos.x -= sin(toRadians(rot.y)) * speed;
                         pos.z += cos(toRadians(rot.y)) * speed;
                     }
-                    if (Keyboard.isKeyDown(Keyboard.KEY_D)) {
+                    if (Keyboard.isKeyDown(Keyboard.KEY_A)) {
                         pos.z -= sin(toRadians(rot.y)) * speed;
                         pos.x -= cos(toRadians(rot.y)) * speed;
                     }
-                    if (Keyboard.isKeyDown(Keyboard.KEY_A)) {
+                    if (Keyboard.isKeyDown(Keyboard.KEY_D)) {
                         pos.z += sin(toRadians(rot.y)) * speed;
                         pos.x += cos(toRadians(rot.y)) * speed;
                     }

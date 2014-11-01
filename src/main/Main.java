@@ -47,7 +47,7 @@ public class Main {
      */
     public static void main(String[] args) {
         Camera camera = new CameraBuilder()
-                .setPos(new Vector3f(0, -30, -60))
+                .setPos(new Vector3f(0, 30, 60))
                 .setRot(new Vector3f(60, 90, 0))
                 .setAspect(1366 / 768f)
                 .setControllable(true)

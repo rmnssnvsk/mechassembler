@@ -35,7 +35,7 @@ public abstract class Camera {
         glRotatef(rot.x, 1, 0, 0);
         glRotatef(rot.y, 0, 1, 0);
         glRotatef(rot.z, 0, 0, 1);
-        glTranslatef(pos.x, pos.y, pos.z);
+        glTranslatef(-pos.x, -pos.y, -pos.z);
     }
 
     public abstract void update(float t);
