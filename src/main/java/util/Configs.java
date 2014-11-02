@@ -1,7 +1,6 @@
 package util;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
@@ -16,7 +15,7 @@ public class Configs {
     static {
         params = new HashMap<>();
         try {
-            BufferedReader reader = new BufferedReader(new FileReader("res/settings.cfg"));
+            BufferedReader reader = new BufferedReader(new FileReader(Configs.class.getClassLoader().getResource("settings.cfg").getFile()));
             String line;
             while ((line = reader.readLine()) != null) {
                 if (line.matches("\\s*#.*")) {

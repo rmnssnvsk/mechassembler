@@ -20,7 +20,7 @@ import java.util.Observable;
 
 /**
  * Класс модели. Модель содержит в себе всю информацию о симуляции и умеет обновлять
- * ее с помощью метода {@link model.Model#update(float)}.
+ * ее с помощью метода {@link Model#update(float)}.
  *
  * @author Mike Sorokin
  */
@@ -45,7 +45,7 @@ public class Model extends Observable {
 
     /**
      * Создает и инициализирует модель. В качестве векора ускорения свободгого падения
-     * используется {@link model.Model#DEFAULT_GRAVITY}
+     * используется {@link Model#DEFAULT_GRAVITY}
      */
     public Model(Camera camera) {
         this(camera, DEFAULT_GRAVITY);

@@ -2,7 +2,6 @@ package util;
 
 import org.newdawn.slick.opengl.Texture;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 
 /**
@@ -14,7 +13,7 @@ public class TextureLoader {
 
     public static Texture load(String name) {
         try {
-            return org.newdawn.slick.opengl.TextureLoader.getTexture("PNG", new FileInputStream("res/textures/" + name + ".png"));
+            return org.newdawn.slick.opengl.TextureLoader.getTexture("PNG", TextureLoader.class.getClassLoader().getResource("textures/" + name + ".png").openStream());
         } catch (IOException e) {
             e.printStackTrace();
             return null;

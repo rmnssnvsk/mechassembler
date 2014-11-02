@@ -1,30 +1,24 @@
 package main;
 
-import com.bulletphysics.collision.shapes.BoxShape;
-import com.bulletphysics.collision.shapes.SphereShape;
 import com.bulletphysics.collision.shapes.StaticPlaneShape;
 import controller.Controller;
 import model.Body;
 import model.Material;
 import model.Model;
+import model.builder.BodyBuilder;
 import model.builder.BoxBodyBuilder;
 import model.builder.MaterialBuilder;
 import model.builder.SphereBodyBuilder;
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.util.glu.GLU;
-import org.lwjgl.util.glu.Sphere;
-import model.builder.BodyBuilder;
 import org.newdawn.slick.opengl.Texture;
-import util.Program;
 import util.TextureLoader;
 import view.Camera;
+import view.View;
 import view.builder.CameraBuilder;
 import view.builder.ViewBuilder;
-import view.View;
 
 import javax.vecmath.Vector3f;
 import javax.vecmath.Vector4f;
-import java.io.IOException;
 
 /**
  * <p>
