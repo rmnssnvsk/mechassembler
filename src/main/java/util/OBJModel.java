@@ -29,7 +29,7 @@ public class OBJModel {
     }
 
     public static OBJModel load(String name) throws IOException {
-        BufferedReader reader = new BufferedReader(new FileReader("res/models/" + name + ".obj"));
+        BufferedReader reader = new BufferedReader(new FileReader(Configs.class.getClassLoader().getResource("res/models/" + name + ".obj").getFile()));
         OBJModel model = new OBJModel();
         String line;
         while ((line = reader.readLine()) != null) {

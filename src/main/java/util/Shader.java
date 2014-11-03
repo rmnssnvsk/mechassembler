@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 
-import static org.lwjgl.opengl.GL11.GL_TRUE;
 import static org.lwjgl.opengl.GL20.*;
 
 class Shader {
@@ -14,7 +13,9 @@ class Shader {
     public Shader(String name, int type) throws IOException {
         shader = glCreateShader(type == VERTEX ? GL_VERTEX_SHADER : GL_FRAGMENT_SHADER);
         StringBuilder source = new StringBuilder();
-        BufferedReader reader = new BufferedReader(new FileReader("res/shaders/" + name + (type == VERTEX ? ".vert" : ".frag")));
+
+
+        BufferedReader reader = new BufferedReader(new FileReader(getClass().getClassLoader().getResource("shaders/" + name + (type == VERTEX ? ".vert" : ".frag")).getFile()));
         String line;
         while ((line = reader.readLine()) != null) {
             source.append(line).append('\n');
@@ -22,7 +23,7 @@ class Shader {
         reader.close();
         glShaderSource(shader, source);
         glCompileShader(shader);
-        assert glGetShaderi(shader, GL_COMPILE_STATUS) == GL_TRUE : "Shader was not be able to be compile correctly.";
+        // assert glGetShaderi(shader, GL_COMPILE_STATUS) == GL_TRUE : "Shader was not be able to be compile correctly.";
     }
 
     public int getShader() {
