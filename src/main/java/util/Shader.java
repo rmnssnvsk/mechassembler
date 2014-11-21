@@ -15,7 +15,7 @@ class Shader {
         StringBuilder source = new StringBuilder();
 
 
-        BufferedReader reader = new BufferedReader(new FileReader(getClass().getClassLoader().getResource("shaders/" + name + (type == VERTEX ? ".vert" : ".frag")).getFile()));
+        BufferedReader reader = new BufferedReader(new FileReader(new ResourceLoader("shaders/" + name + (type == VERTEX ? ".vert" : ".frag")).getFile()));
         String line;
         while ((line = reader.readLine()) != null) {
             source.append(line).append('\n');

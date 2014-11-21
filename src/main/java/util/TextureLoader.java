@@ -13,7 +13,7 @@ public class TextureLoader {
 
     public static Texture load(String name) {
         try {
-            return org.newdawn.slick.opengl.TextureLoader.getTexture("PNG", TextureLoader.class.getClassLoader().getResource("textures/" + name + ".png").openStream());
+            return org.newdawn.slick.opengl.TextureLoader.getTexture("PNG", new ResourceLoader("textures/" + name + ".png").getURL().openStream());
         } catch (IOException e) {
             e.printStackTrace();
             return null;
