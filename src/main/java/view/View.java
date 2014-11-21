@@ -38,7 +38,15 @@ public class View extends Observable {
     private Program program = null;
     boolean drawAxes;
 
-    public View(DisplayMode displayMode, boolean fullscreen, boolean vSync, boolean resizable, boolean mouseGrabbed, String title, Camera camera, String program, boolean drawAxes) {
+    public View(DisplayMode displayMode,
+                boolean fullscreen,
+                boolean vSync,
+                boolean resizable,
+                boolean mouseGrabbed,
+                String title,
+                Camera camera,
+                String program,
+                boolean drawAxes) {
         try {
             if (!fullscreen)
                 Display.setDisplayMode(displayMode);
