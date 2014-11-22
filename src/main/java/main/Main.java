@@ -40,6 +40,10 @@ public class Main {
      * @param args Аргументы, с которыми была вызвана программа.
      */
     public static void main(String[] args) {
+        new Main();
+    }
+
+    public Main() {
         Camera camera = new CameraBuilder()
                 .setPos(new Vector3f(0, 30, 60))
                 .setRot(new Vector3f(30, 1, 0))
