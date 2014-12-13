@@ -28,7 +28,7 @@ import static org.lwjgl.opengl.GL11.*;
 public class SphereBodyBuilder {
     private float mass = 1;
     private float restitution = .1f;
-    private float friction = .1f;
+    private float friction = 1;
     private float radius = 1;
     private float angularDamping = .3f;
     private Texture texture = TextureLoader.NO_TEXTURE;

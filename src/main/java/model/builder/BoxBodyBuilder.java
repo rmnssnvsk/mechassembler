@@ -2,7 +2,6 @@ package model.builder;
 
 import com.bulletphysics.collision.shapes.BoxShape;
 import com.bulletphysics.collision.shapes.CollisionShape;
-import com.bulletphysics.collision.shapes.SphereShape;
 import com.bulletphysics.dynamics.RigidBody;
 import com.bulletphysics.dynamics.RigidBodyConstructionInfo;
 import com.bulletphysics.linearmath.DefaultMotionState;
@@ -10,9 +9,6 @@ import com.bulletphysics.linearmath.Transform;
 import model.Body;
 import model.Material;
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.util.glu.GLU;
-import org.lwjgl.util.glu.Quadric;
-import org.lwjgl.util.glu.Sphere;
 import org.newdawn.slick.opengl.Texture;
 import util.DisplayList;
 import util.TextureLoader;
@@ -31,7 +27,7 @@ import static org.lwjgl.opengl.GL11.*;
 public class BoxBodyBuilder {
     private float mass = 1;
     private float restitution = .1f;
-    private float friction = .1f;
+    private float friction = 1;
     private Texture texture = TextureLoader.NO_TEXTURE;
     private Material material = new MaterialBuilder().build();
     private Vector3f size = new Vector3f(1, 1, 1);

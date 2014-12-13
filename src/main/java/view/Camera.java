@@ -1,6 +1,5 @@
 package view;
 
-import org.lwjgl.opengl.Display;
 import org.lwjgl.util.glu.GLU;
 
 import javax.vecmath.Vector3f;
@@ -39,4 +38,12 @@ public abstract class Camera {
     }
 
     public abstract void update(float t);
+
+    public Vector3f getPos() {
+        return pos;
+    }
+
+    public Vector3f getRot() {
+        return rot;
+    }
 }

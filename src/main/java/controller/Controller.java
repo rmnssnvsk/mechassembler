@@ -1,9 +1,9 @@
 package controller;
 
-import model.Body;
 import model.Model;
 import view.View;
 import view.event.CloseRequestedViewEvent;
+import view.event.PropertyChangeRequestViewEvent;
 import view.event.ViewEvent;
 
 import java.util.*;
@@ -28,9 +28,15 @@ public class Controller implements Observer {
         if (o instanceof Model) {
             view.show(model.getBodies());
         } else {
+            //noinspection unchecked
             List<ViewEvent> events = (List<ViewEvent>) arg;
-            events.stream().filter(event -> event instanceof CloseRequestedViewEvent).forEach(event -> {
-                model.stop();
+            events.stream().forEach(e -> {
+                if (e instanceof CloseRequestedViewEvent) {
+                    model.stop();
+                } else //noinspection StatementWithEmptyBody
+                    if (e instanceof PropertyChangeRequestViewEvent) {
+                    // TODO
+                }
             });
         }
     }

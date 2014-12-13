@@ -1,6 +1,5 @@
 package util;
 
-import org.lwjgl.BufferUtils;
 import org.lwjgl.util.vector.Vector3f;
 import org.newdawn.slick.opengl.Texture;
 
@@ -8,7 +7,6 @@ import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.IOException;
-import java.nio.FloatBuffer;
 import java.util.HashMap;
 
 import static org.lwjgl.opengl.GL11.*;
@@ -23,7 +21,7 @@ class MTL {
     HashMap<String, Style> styles;
 
     public MTL(String filename) throws IOException {
-        BufferedReader reader = new BufferedReader(new FileReader("res/models/" + filename));
+        BufferedReader reader = new BufferedReader(new FileReader(new ResourceLoader("models/" + filename).getFile()));
         String line;
         styles = new HashMap<>();
         String curStyleName;
@@ -34,23 +32,28 @@ class MTL {
                 curStyleName = line.split(" ")[1];
                 styles.put(curStyleName, (curStyle = new Style()));
             } else if (line.startsWith("Ns ")) {
+                assert curStyle != null;
                 curStyle.Ns = Float.parseFloat(line.split(" ")[1]);
             } else if (line.startsWith("Ka ")) {
                 String[] arg = line.split(" ");
+                assert curStyle != null;
                 curStyle.Ka.x = Float.parseFloat(arg[1]);
                 curStyle.Ka.y = Float.parseFloat(arg[2]);
                 curStyle.Ka.z = Float.parseFloat(arg[3]);
             } else if (line.startsWith("Kd ")) {
                 String[] arg = line.split(" ");
+                assert curStyle != null;
                 curStyle.Kd.x = Float.parseFloat(arg[1]);
                 curStyle.Kd.y = Float.parseFloat(arg[2]);
                 curStyle.Kd.z = Float.parseFloat(arg[3]);
             } else if (line.startsWith("Ks ")) {
                 String[] arg = line.split(" ");
+                assert curStyle != null;
                 curStyle.Ks.x = Float.parseFloat(arg[1]);
                 curStyle.Ks.y = Float.parseFloat(arg[2]);
                 curStyle.Ks.z = Float.parseFloat(arg[3]);
             } else if (line.startsWith("map_Kd ")) {
+                assert curStyle != null;
                 curStyle.map_Kd = org.newdawn.slick.opengl.TextureLoader.getTexture("PNG", new FileInputStream("res/models/" + line.split(" ")[1].replace("\\", "/")));
             }
         }
@@ -79,7 +82,7 @@ class MTL {
             if (map_Kd != null) {
                 map_Kd.bind();
             } else {
-                glBindTexture(GL_TEXTURE_2D, 0);
+                glBindTexture(GL_TEXTURE_2D, TextureLoader.NO_TEXTURE.getTextureID());
             }
         }
     }

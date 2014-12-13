@@ -1,31 +1,25 @@
 package view;
 
-import com.bulletphysics.dynamics.DynamicsWorld;
 import com.bulletphysics.linearmath.Transform;
 import model.Body;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.LWJGLException;
-import org.lwjgl.Sys;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
-import org.lwjgl.opengl.GL20;
 import util.Program;
-import util.TextureLoader;
+import view.event.PropertyChangeRequestViewEvent;
 import view.event.ViewEvent;
 import view.event.CloseRequestedViewEvent;
 
 import javax.vecmath.Vector3f;
 import java.nio.FloatBuffer;
-import java.security.Key;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Observable;
 
 import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL11.GL_LINEAR;
 import static org.lwjgl.opengl.GL20.*;
 
 /**
@@ -48,9 +42,11 @@ public class View extends Observable {
                 String program,
                 boolean drawAxes) {
         try {
-            if (!fullscreen)
+            if (!fullscreen) {
                 Display.setDisplayMode(displayMode);
-            Display.setFullscreen(fullscreen);
+            } else {
+                Display.setFullscreen(true);
+            }
             Display.setVSyncEnabled(vSync);
             Display.setResizable(resizable);
             Mouse.setGrabbed(mouseGrabbed);
@@ -62,10 +58,10 @@ public class View extends Observable {
         this.camera = camera;
         camera.applyProjectionMatrix();
         glEnable(GL_DEPTH_TEST);
-        glLight(GL_LIGHT0, GL_AMBIENT, asFloatBuffer(.3f, .3f, .3f, 1));
+        glLight(GL_LIGHT0, GL_AMBIENT, asFloatBuffer(.5f, .5f, .5f, 1));
         glLight(GL_LIGHT0, GL_DIFFUSE, asFloatBuffer(1, 1, 1, 1));
         glLight(GL_LIGHT0, GL_SPECULAR, asFloatBuffer(10, 10, 10, 1));
-        glLight(GL_LIGHT0, GL_POSITION, asFloatBuffer(0, 0, 60, 1));
+        glLight(GL_LIGHT0, GL_POSITION, asFloatBuffer(0, 0, -60, 1));
         glDepthFunc(GL_LEQUAL);
         glShadeModel(GL_SMOOTH);
         if (program == null) {
@@ -161,6 +157,11 @@ public class View extends Observable {
                 case Keyboard.KEY_O:
                     this.drawAxes = this.drawAxes ^ Keyboard.getEventKeyState();
                     break;
+            }
+        }
+        while (Mouse.next()) {
+            if (Mouse.getEventButton() == 0 && Mouse.getEventButtonState()) {
+                events.add(new PropertyChangeRequestViewEvent(this));
             }
         }
         setChanged();

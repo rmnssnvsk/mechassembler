@@ -7,7 +7,6 @@ import com.bulletphysics.dynamics.RigidBodyConstructionInfo;
 import com.bulletphysics.linearmath.DefaultMotionState;
 import com.bulletphysics.linearmath.Transform;
 import model.Body;
-import org.newdawn.slick.opengl.Texture;
 import util.DisplayList;
 
 import javax.vecmath.Matrix4f;
@@ -22,7 +21,7 @@ import javax.vecmath.Vector3f;
 public class BodyBuilder {
     private float mass = 1;
     private float restitution = .1f;
-    private float friction = .1f;
+    private float friction = 1;
     private Vector3f pos = new Vector3f(0, 0, 0);
     private Vector3f rot = new Vector3f(0, 0, 0);
     private CollisionShape shape = new BoxShape(new Vector3f(1, 1, 1));
