@@ -1,7 +1,6 @@
 package view.builder;
 
 import org.lwjgl.opengl.DisplayMode;
-import util.Program;
 import view.Camera;
 import view.View;
 
@@ -21,6 +20,7 @@ public class ViewBuilder {
     private Camera camera = new CameraBuilder().build();
     private String program = null;
     private boolean drawAxes = false;
+    private boolean confEnabled = false;
 
     public ViewBuilder setX(int x) {
         this.x = x;
@@ -72,7 +72,12 @@ public class ViewBuilder {
         return this;
     }
 
+    public ViewBuilder setConfEnabled(boolean confEnabled) {
+        this.confEnabled = confEnabled;
+        return this;
+    }
+
     public View build() {
-        return new View(new DisplayMode(x, y), fullscreen, vSync, resizable, mouseGrabbed, title, camera, program, drawAxes);
+        return new View(new DisplayMode(x, y), fullscreen, vSync, resizable, mouseGrabbed, title, camera, program, drawAxes, confEnabled);
     }
 }

@@ -24,7 +24,7 @@ import static org.lwjgl.opengl.GL11.*;
  */
 public class OBJModelLoader {
 
-    public static Body load(String name) throws IOException {
+    public static BodyBuilder load(String name) throws IOException {
         ArrayList<Vector3f> vertices = new ArrayList<>();
         ArrayList<Vector3f> normals = new ArrayList<>();
         ArrayList<Vector2f> textures = new ArrayList<>();
@@ -124,7 +124,6 @@ public class OBJModelLoader {
 
         return new BodyBuilder()
                 .setCollisionShape(shape)
-                .setDisplayList(list.code)
-                .build();
+                .setDisplayList(list.code);
     }
 }

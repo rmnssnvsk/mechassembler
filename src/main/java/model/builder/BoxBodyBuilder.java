@@ -24,7 +24,7 @@ import static org.lwjgl.opengl.GL11.*;
  *
  * @author Mike Sorokin
  */
-public class BoxBodyBuilder {
+public class BoxBodyBuilder extends BodyBuilder {
     private float mass = 1;
     private float restitution = .1f;
     private float friction = 1;
@@ -33,6 +33,7 @@ public class BoxBodyBuilder {
     private Vector3f size = new Vector3f(1, 1, 1);
     private Vector3f pos = new Vector3f(0, 0, 0);
     private Vector3f rot = new Vector3f(0, 0, 0);
+    private Vector3f impulse = new Vector3f(0, 0, 0);
     private Vector3f color = new Vector3f(1, 1, 1);
 
     public BoxBodyBuilder setMass(float mass) {
@@ -113,6 +114,10 @@ public class BoxBodyBuilder {
         return this;
     }
 
+    public BodyBuilder setImpulse(Vector3f impulse) {
+        this.impulse = impulse;
+        return this;
+    }
 
     public BoxBodyBuilder setColor(Vector3f color) {
         this.color = color;
@@ -221,8 +226,11 @@ public class BoxBodyBuilder {
         );
         info.restitution = restitution;
         info.friction = friction;
+        RigidBody rigidBody = new RigidBody(info);
+        rigidBody.setUserPointer(this);
+        rigidBody.applyCentralImpulse(impulse);
         return new Body(
-                new RigidBody(info),
+                rigidBody,
                 list
         );
     }

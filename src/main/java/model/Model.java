@@ -33,29 +33,29 @@ public class Model extends Observable {
      */
     private DynamicsWorld world;
 
-    /**
-     * Список тел, учавствующих в симуляции
-     */
+    private Level level;
     private List<Body> bodies;
 
     private Camera camera;
     private boolean stopRequested = false;
+    private RunState runState = RunState.CONF;
 
     /**
      * Создает и инициализирует модель. В качестве векора ускорения свободгого падения
      * используется {@link Model#DEFAULT_GRAVITY}
      */
-    public Model(Camera camera) {
-        this(camera, DEFAULT_GRAVITY);
+    public Model(Camera camera, Level level) {
+        this(camera, DEFAULT_GRAVITY, level);
     }
 
     /**
      * Создает и инициализирует модель.
      * @param gravity вектор ускорения свободного падения
      */
-    public Model(Camera camera, Vector3f gravity) {
+    public Model(Camera camera, Vector3f gravity, Level level) {
+        this.bodies = new ArrayList<>();
         this.camera = camera;
-        bodies = new ArrayList<>();
+        this.level = level;
         BroadphaseInterface broadphaseInterface = new DbvtBroadphase();
         CollisionConfiguration collisionConfiguration = new DefaultCollisionConfiguration();
         CollisionDispatcher collisionDispatcher = new CollisionDispatcher(collisionConfiguration);
@@ -65,6 +65,7 @@ public class Model extends Observable {
     }
 
     public void start() {
+        load();
         stopRequested = false;
         double lastFrame = System.currentTimeMillis() / 1000d;
         while (!stopRequested) {
@@ -85,36 +86,22 @@ public class Model extends Observable {
      */
     private void update(float t) {
         camera.update(t);
-        world.stepSimulation(t);
+        if (runState == RunState.TEST) {
+            world.stepSimulation(t);
+        }
         setChanged();
         notifyObservers();
     }
 
-    /**
-     * Добавляет тело в симуляцию.
-     * @param body тело
-     */
-    public void addBody(Body body) {
-        bodies.add(body);
-        world.addRigidBody(body.getRigidBody());
+    private void load() {
+        level.getBodies().stream().forEach(b -> bodies.add(b.build()));
+        bodies.stream().forEach(b -> world.addRigidBody(b.getRigidBody()));
     }
 
-    /**
-     * Удаляет тело из симуляции.
-     * @param body тело
-     */
-    public void removeBody(Body body) {
-        bodies.remove(body);
-        world.removeRigidBody(body.getRigidBody());
-        body.getRigidBody().destroy();
-    }
-
-    /**
-     * Возвращает список тел, учавствующих в симуляции.
-     * @return список тел, учавствующих в симуляции
-     */
-    public List<Body> getBodies() {
-        return bodies;
+    public void reload() {
+        bodies.stream().forEach(b -> world.removeRigidBody(b.getRigidBody()));
+        bodies.clear();
+        load();
     }
 
     /**
@@ -133,15 +120,24 @@ public class Model extends Observable {
         return world.getGravity(new Vector3f());
     }
 
-    /**
-     * Удаляет объекты, используемые моделью, причем после этого оно будет непригодно к использованию.
-     * Обязательно вызывать перед завершением работы с этой моделью.
-     */
-    public void delete() {
-        bodies.stream().forEach(Body::delete);
-    }
-
     public DynamicsWorld getWorld() {
         return world;
+    }
+
+    public void setRunState(RunState state) {
+        reload();
+        this.runState = state;
+    }
+
+    public RunState getRunState() {
+        return runState;
+    }
+
+    public List<Body> getBodies() {
+        return bodies;
+    }
+
+    public void delete() {
+        bodies.stream().forEach(Body::delete);
     }
 }

@@ -25,7 +25,7 @@ import static org.lwjgl.opengl.GL11.*;
  *
  * @author Mike Sorokin
  */
-public class SphereBodyBuilder {
+public class SphereBodyBuilder extends BodyBuilder {
     private float mass = 1;
     private float restitution = .1f;
     private float friction = 1;
@@ -35,6 +35,7 @@ public class SphereBodyBuilder {
     private Material material = new MaterialBuilder().build();
     private Vector3f pos = new Vector3f(0, 0, 0);
     private Vector3f rot = new Vector3f(0, 0, 0);
+    private Vector3f impulse = new Vector3f(0, 0, 0);
     private Vector3f color = new Vector3f(1, 1, 1);
 
     public SphereBodyBuilder setMass(float mass) {
@@ -102,6 +103,11 @@ public class SphereBodyBuilder {
     public SphereBodyBuilder setRotZ(float z) {
         //FIXME
         this.rot.z = z;
+        return this;
+    }
+
+    public BodyBuilder setImpulse(Vector3f impulse) {
+        this.impulse = impulse;
         return this;
     }
 
@@ -190,8 +196,11 @@ public class SphereBodyBuilder {
         info.restitution = restitution;
         info.friction = friction;
         info.angularDamping = angularDamping;
+        RigidBody rigidBody = new RigidBody(info);
+        rigidBody.setUserPointer(this);
+        rigidBody.applyCentralImpulse(impulse);
         return new Body(
-                new RigidBody(info),
+                rigidBody,
                 list
         );
     }

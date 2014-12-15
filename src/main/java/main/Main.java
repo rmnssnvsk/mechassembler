@@ -3,6 +3,7 @@ package main;
 import com.bulletphysics.collision.shapes.*;
 import controller.Controller;
 import model.Body;
+import model.Level;
 import model.Material;
 import model.Model;
 import model.builder.BodyBuilder;
@@ -51,7 +52,6 @@ public class Main {
                 .setAspect(1366 / 768f)
                 .setControllable(true)
                 .build();
-        Model model = new Model(camera);
         View view = new ViewBuilder()
                 .setX(1366)
                 .setY(768)
@@ -61,10 +61,6 @@ public class Main {
                 .setCamera(camera)
                 .setProgram("light")
                 .build();
-        Controller controller = new Controller(model, view);
-        model.addObserver(controller);
-        view.addObserver(controller);
-
         Texture ballTexture = TextureLoader.load("basketball");
         Material ballMaterial = new MaterialBuilder()
                 .setSpecular(new Vector4f(.01f, .01f, .01f, 1))
@@ -72,7 +68,7 @@ public class Main {
         Material plainMaterial = new MaterialBuilder()
                 .setSpecular(new Vector4f(.05f, .05f, .05f, 1))
                 .build();
-        Body ball1 = new SphereBodyBuilder()
+        BodyBuilder ball = new SphereBodyBuilder()
                 .setMass(.5f)
                 .setRestitution(.5f)
                 .setFriction(.7f)
@@ -81,16 +77,15 @@ public class Main {
                 .setRadius(1.5f)
                 .setTexture(ballTexture)
                 .setMaterial(ballMaterial)
-                .build();
-        Body box = new BoxBodyBuilder()
+                .setImpulse(new Vector3f(4, 4, 0));
+        BodyBuilder box = new BoxBodyBuilder()
                 .setMass(0)
-                .setRestitution(1)
+                .setRestitution(10)
                 .setSize(new Vector3f(3, .1f, 1))
                 .setColor(new Vector3f(1, 0, 0))
                 .setPosY(10)
-                .setPosX(-10)
-                .build();
-        Body plane = new BodyBuilder()
+                .setPosX(-10);
+        BodyBuilder plane = new BodyBuilder()
                 .setMass(0)
                 .setRestitution(.75f)
                 .setFriction(.7f)
@@ -106,18 +101,24 @@ public class Main {
                     GL11.glVertex3f(50, 0, 50);
                     GL11.glVertex3f(-50, 0, 50);
                     GL11.glEnd();
-                })
-                .build();
-        model.addBody(ball1);
-        ball1.getRigidBody().applyCentralImpulse(new Vector3f(4, 4, 0));
-        model.addBody(plane);
-        model.addBody(box);
+                });
+
+        Level level = new Level();
+        level.addBody(ball);
+        level.addBody(plane);
+        level.addBody(box);
         try {
-            Body body = OBJModelLoader.load("bucket");
-            model.addBody(body);
+            BodyBuilder body = OBJModelLoader.load("bucket");
+            level.addBody(body);
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        Model model = new Model(camera, level);
+
+        Controller controller = new Controller(model, view);
+        model.addObserver(controller);
+        view.addObserver(controller);
 
         model.start();
         model.delete();

@@ -24,6 +24,7 @@ public class BodyBuilder {
     private float friction = 1;
     private Vector3f pos = new Vector3f(0, 0, 0);
     private Vector3f rot = new Vector3f(0, 0, 0);
+    private Vector3f impulse = new Vector3f(0, 0, 0);
     private CollisionShape shape = new BoxShape(new Vector3f(1, 1, 1));
     private DisplayList list = new DisplayList(() -> {});
 
@@ -85,6 +86,11 @@ public class BodyBuilder {
         return this;
     }
 
+    public BodyBuilder setImpulse(Vector3f impulse) {
+        this.impulse = impulse;
+        return this;
+    }
+
     public BodyBuilder setCollisionShape(CollisionShape shape) {
         this.shape = shape;
         return this;
@@ -110,8 +116,11 @@ public class BodyBuilder {
         );
         info.restitution = restitution;
         info.friction = friction;
+        RigidBody rigidBody = new RigidBody(info);
+        rigidBody.setUserPointer(this);
+        rigidBody.applyCentralImpulse(impulse);
         return new Body(
-                new RigidBody(info),
+                rigidBody,
                 list
         );
     }

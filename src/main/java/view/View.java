@@ -2,6 +2,7 @@ package view;
 
 import com.bulletphysics.linearmath.Transform;
 import model.Body;
+import model.RunState;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Keyboard;
@@ -9,9 +10,7 @@ import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import util.Program;
-import view.event.PropertyChangeRequestViewEvent;
-import view.event.ViewEvent;
-import view.event.CloseRequestedViewEvent;
+import view.event.*;
 
 import javax.vecmath.Vector3f;
 import java.nio.FloatBuffer;
@@ -30,7 +29,8 @@ import static org.lwjgl.opengl.GL20.*;
 public class View extends Observable {
     private Camera camera;
     private Program program = null;
-    boolean drawAxes;
+    private int width, height;
+    private boolean drawAxes, confEnabled;
 
     public View(DisplayMode displayMode,
                 boolean fullscreen,
@@ -40,7 +40,8 @@ public class View extends Observable {
                 String title,
                 Camera camera,
                 String program,
-                boolean drawAxes) {
+                boolean drawAxes,
+                boolean confEnabled) {
         try {
             if (!fullscreen) {
                 Display.setDisplayMode(displayMode);
@@ -56,13 +57,14 @@ public class View extends Observable {
             e.printStackTrace();
         }
         this.camera = camera;
-        camera.applyProjectionMatrix();
+        this.width = Display.getWidth();
+        this.height = Display.getHeight();
         glEnable(GL_DEPTH_TEST);
         glLight(GL_LIGHT0, GL_AMBIENT, asFloatBuffer(.5f, .5f, .5f, 1));
         glLight(GL_LIGHT0, GL_DIFFUSE, asFloatBuffer(1, 1, 1, 1));
         glLight(GL_LIGHT0, GL_SPECULAR, asFloatBuffer(10, 10, 10, 1));
         glLight(GL_LIGHT0, GL_POSITION, asFloatBuffer(0, 0, -60, 1));
-        glDepthFunc(GL_LEQUAL);
+        glDepthFunc(GL_LESS);
         glShadeModel(GL_SMOOTH);
         if (program == null) {
             Program.useDummy();
@@ -70,6 +72,7 @@ public class View extends Observable {
             this.program = new Program(program);
         }
         this.drawAxes = drawAxes;
+        this.confEnabled = confEnabled;
     }
 
     private FloatBuffer asFloatBuffer(float... floats) {
@@ -95,6 +98,10 @@ public class View extends Observable {
      * @param bodies тела в симуляции (возвращаются методом {@link model.Model#getBodies()})
      */
     public void show(List<Body> bodies) {
+        glMatrixMode(GL_PROJECTION);
+        glLoadIdentity();
+        camera.applyProjectionMatrix();
+        glMatrixMode(GL_MODELVIEW);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glLoadIdentity();
         camera.applyViewMatrix();
@@ -118,8 +125,8 @@ public class View extends Observable {
             body.getList().call();
             glPopMatrix();
         });
+        Program.useDummy();
         if (drawAxes) {
-            Program.useDummy();
             glClear(GL_DEPTH_BUFFER_BIT);
             glBegin(GL_LINES);
             glColor3f(1, 0, 0);
@@ -147,25 +154,58 @@ public class View extends Observable {
                 glEnd();
             });
         }
+        glMatrixMode(GL_PROJECTION);
+        glLoadIdentity();
+        glOrtho(0, Display.getWidth(), Display.getHeight(), 0, 1, -1);
+        glMatrixMode(GL_MODELVIEW);
+        glClear(GL_DEPTH_BUFFER_BIT);
+        glLoadIdentity();
+        glColor3f(1, 1, 1);
+        glBegin(GL_QUADS);
+
+        glVertex2f(width / 2 - 2, height / 2 - 10);
+        glVertex2f(width / 2 - 2, height / 2 + 10);
+        glVertex2f(width / 2 + 2, height / 2 + 10);
+        glVertex2f(width / 2 + 2, height / 2 - 10);
+
+        glVertex2f(width / 2 - 10, height / 2 - 2);
+        glVertex2f(width / 2 - 10, height / 2 + 2);
+        glVertex2f(width / 2 + 10, height / 2 + 2);
+        glVertex2f(width / 2 + 10, height / 2 - 2);
+
+        glEnd();
+
         Display.update();
         List<ViewEvent> events = new ArrayList<>();
         while (Keyboard.next()) {
-            switch (Keyboard.getEventKey()) {
-                case Keyboard.KEY_ESCAPE:
-                    events.add(new CloseRequestedViewEvent(this));
-                    break;
-                case Keyboard.KEY_O:
-                    this.drawAxes = this.drawAxes ^ Keyboard.getEventKeyState();
-                    break;
+            if (Keyboard.getEventKeyState()) {
+                switch (Keyboard.getEventKey()) {
+                    case Keyboard.KEY_ESCAPE:
+                        events.add(new CloseRequestedViewEvent(this));
+                        break;
+                    case Keyboard.KEY_O:
+                        this.drawAxes = this.drawAxes ^ Keyboard.getEventKeyState();
+                        break;
+                    case Keyboard.KEY_F1:
+                        events.add(new StateChangeRequestedViewEvent(this, RunState.TEST));
+                        break;
+                    case Keyboard.KEY_F2:
+                        events.add(new StateChangeRequestedViewEvent(this, RunState.CONF));
+                        break;
+                }
             }
         }
         while (Mouse.next()) {
-            if (Mouse.getEventButton() == 0 && Mouse.getEventButtonState()) {
+            if (confEnabled && Mouse.getEventButton() == 0 && Mouse.getEventButtonState()) {
                 events.add(new PropertyChangeRequestViewEvent(this));
             }
         }
         setChanged();
         notifyObservers(events);
+    }
+
+    public void setConfEnabled(boolean confEnabled) {
+        this.confEnabled = confEnabled;
     }
 
     public Camera getCamera() {
