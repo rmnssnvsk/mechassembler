@@ -2,14 +2,11 @@ package main;
 
 import com.bulletphysics.collision.shapes.*;
 import controller.Controller;
-import model.Body;
+import model.GoalListener;
 import model.Level;
 import model.Material;
 import model.Model;
-import model.builder.BodyBuilder;
-import model.builder.BoxBodyBuilder;
-import model.builder.MaterialBuilder;
-import model.builder.SphereBodyBuilder;
+import model.builder.*;
 import org.lwjgl.opengl.GL11;
 import org.newdawn.slick.opengl.Texture;
 import util.OBJModelLoader;
@@ -55,7 +52,6 @@ public class Main {
         View view = new ViewBuilder()
                 .setX(1366)
                 .setY(768)
-                .setFullscreen(true)
                 .setMouseGrabbed(true)
                 .setTitle("Mechassembler")
                 .setCamera(camera)
@@ -68,7 +64,7 @@ public class Main {
         Material plainMaterial = new MaterialBuilder()
                 .setSpecular(new Vector4f(.05f, .05f, .05f, 1))
                 .build();
-        BodyBuilder ball = new SphereBodyBuilder()
+        AbstractBodyBuilder ball = new SphereBodyBuilder("ball")
                 .setMass(.5f)
                 .setRestitution(.5f)
                 .setFriction(.7f)
@@ -78,14 +74,15 @@ public class Main {
                 .setTexture(ballTexture)
                 .setMaterial(ballMaterial)
                 .setImpulse(new Vector3f(4, 4, 0));
-        BodyBuilder box = new BoxBodyBuilder()
+        AbstractBodyBuilder box = new BoxBodyBuilder("box")
                 .setMass(0)
                 .setRestitution(10)
                 .setSize(new Vector3f(3, .1f, 1))
                 .setColor(new Vector3f(1, 0, 0))
                 .setPosY(10)
-                .setPosX(-10);
-        BodyBuilder plane = new BodyBuilder()
+                .setPosX(-10)
+                .addChangeableParam("restitution", 0, 10);
+        AbstractBodyBuilder plane = new DefaultBodyBuilder("plane")
                 .setMass(0)
                 .setRestitution(.75f)
                 .setFriction(.7f)
@@ -108,7 +105,7 @@ public class Main {
         level.addBody(plane);
         level.addBody(box);
         try {
-            BodyBuilder body = OBJModelLoader.load("bucket");
+            AbstractBodyBuilder body = OBJModelLoader.load("bucket", "bucket");
             level.addBody(body);
         } catch (IOException e) {
             e.printStackTrace();
@@ -117,8 +114,11 @@ public class Main {
         Model model = new Model(camera, level);
 
         Controller controller = new Controller(model, view);
+        GoalListener listener = new GoalListener("ball", "bucket", 2, 3);
         model.addObserver(controller);
+        model.addObserver(listener);
         view.addObserver(controller);
+        listener.addObserver(controller);
 
         model.start();
         model.delete();

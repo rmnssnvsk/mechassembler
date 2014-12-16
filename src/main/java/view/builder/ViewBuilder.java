@@ -20,7 +20,7 @@ public class ViewBuilder {
     private Camera camera = new CameraBuilder().build();
     private String program = null;
     private boolean drawAxes = false;
-    private boolean confEnabled = false;
+    private boolean confEnabled = true;
 
     public ViewBuilder setX(int x) {
         this.x = x;

@@ -1,15 +1,17 @@
 package controller;
 
 import com.bulletphysics.collision.dispatch.CollisionWorld;
+import model.GoalListener;
 import model.Model;
 import model.RunState;
-import model.builder.BodyBuilder;
+import model.builder.AbstractBodyBuilder;
 import view.View;
 import view.event.CloseRequestedViewEvent;
 import view.event.PropertyChangeRequestViewEvent;
 import view.event.StateChangeRequestedViewEvent;
 import view.event.ViewEvent;
 
+import javax.swing.*;
 import javax.vecmath.Vector3f;
 import java.util.List;
 import java.util.Observable;
@@ -35,7 +37,7 @@ public class Controller implements Observer {
     public void update(Observable o, Object arg) {
         if (o instanceof Model) {
             view.show(model.getBodies());
-        } else {
+        } else if (o instanceof View) {
             //noinspection unchecked
             List<ViewEvent> events = (List<ViewEvent>) arg;
             events.stream().forEach(e -> {
@@ -54,9 +56,9 @@ public class Controller implements Observer {
                     CollisionWorld.ClosestRayResultCallback callback = new CollisionWorld.ClosestRayResultCallback(begin, end);
                     model.getWorld().rayTest(begin, end, callback);
                     if (callback.hasHit()) {
-                        ((BodyBuilder) callback.collisionObject.getUserPointer()).setRestitution(1);
-                        System.out.printf("Setting rest to 1.\n");
+                        ((AbstractBodyBuilder) callback.collisionObject.getUserPointer()).change();
                     }
+                    model.reloadBodyById(((AbstractBodyBuilder) callback.collisionObject.getUserPointer()).id);
                 } else if (e instanceof StateChangeRequestedViewEvent) {
                     StateChangeRequestedViewEvent event = (StateChangeRequestedViewEvent) e;
                     if (event.state != model.getRunState()) {
@@ -65,6 +67,9 @@ public class Controller implements Observer {
                     }
                 }
             });
+        } else if (o instanceof GoalListener) {
+            model.stop();
+            JOptionPane.showMessageDialog(null, "You win!");
         }
     }
 }

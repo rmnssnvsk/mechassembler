@@ -64,7 +64,7 @@ public class View extends Observable {
         glLight(GL_LIGHT0, GL_DIFFUSE, asFloatBuffer(1, 1, 1, 1));
         glLight(GL_LIGHT0, GL_SPECULAR, asFloatBuffer(10, 10, 10, 1));
         glLight(GL_LIGHT0, GL_POSITION, asFloatBuffer(0, 0, -60, 1));
-        glDepthFunc(GL_LESS);
+        glDepthFunc(GL_LEQUAL);
         glShadeModel(GL_SMOOTH);
         if (program == null) {
             Program.useDummy();

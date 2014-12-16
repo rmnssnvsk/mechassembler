@@ -24,21 +24,33 @@ import static org.lwjgl.opengl.GL11.*;
  *
  * @author Mike Sorokin
  */
-public class BoxBodyBuilder extends BodyBuilder {
-    private float mass = 1;
-    private float restitution = .1f;
-    private float friction = 1;
+public class BoxBodyBuilder extends DefaultBodyBuilder {
+    protected float mass = 1;
+    protected float restitution = .1f;
+    protected float friction = 1;
+    protected Vector3f pos = new Vector3f(0, 0, 0);
+    protected Vector3f rot = new Vector3f(0, 0, 0);
+    protected Vector3f impulse = new Vector3f(0, 0, 0);
     private Texture texture = TextureLoader.NO_TEXTURE;
     private Material material = new MaterialBuilder().build();
     private Vector3f size = new Vector3f(1, 1, 1);
-    private Vector3f pos = new Vector3f(0, 0, 0);
-    private Vector3f rot = new Vector3f(0, 0, 0);
-    private Vector3f impulse = new Vector3f(0, 0, 0);
     private Vector3f color = new Vector3f(1, 1, 1);
+
+    public BoxBodyBuilder(String id) {
+        super(id);
+    }
+
+    public float getMass() {
+        return mass;
+    }
 
     public BoxBodyBuilder setMass(float mass) {
         this.mass = mass;
         return this;
+    }
+
+    public float getRestitution() {
+        return restitution;
     }
 
     public BoxBodyBuilder setRestitution(float restitution) {
@@ -46,29 +58,17 @@ public class BoxBodyBuilder extends BodyBuilder {
         return this;
     }
 
+    public float getFriction() {
+        return friction;
+    }
+
     public BoxBodyBuilder setFriction(float friction) {
         this.friction = friction;
         return this;
     }
 
-    public BoxBodyBuilder setSize(Vector3f size) {
-        this.size = size;
-        return this;
-    }
-
-    public BoxBodyBuilder setSizeX(float x) {
-        this.size.x = x;
-        return this;
-    }
-
-    public BoxBodyBuilder setSizeY(float y) {
-        this.size.y = y;
-        return this;
-    }
-
-    public BoxBodyBuilder setSizeZ(float z) {
-        this.size.z = z;
-        return this;
+    public Vector3f getPos() {
+        return pos;
     }
 
     public BoxBodyBuilder setPos(Vector3f pos) {
@@ -76,9 +76,17 @@ public class BoxBodyBuilder extends BodyBuilder {
         return this;
     }
 
+    public float getPosX() {
+        return pos.x;
+    }
+
     public BoxBodyBuilder setPosX(float x) {
         this.pos.x = x;
         return this;
+    }
+
+    public float getPosY() {
+        return pos.y;
     }
 
     public BoxBodyBuilder setPosY(float y) {
@@ -86,14 +94,26 @@ public class BoxBodyBuilder extends BodyBuilder {
         return this;
     }
 
+    public float getPosZ() {
+        return pos.z;
+    }
+
     public BoxBodyBuilder setPosZ(float z) {
         this.pos.z = z;
         return this;
     }
 
+    public Vector3f getRot() {
+        return rot;
+    }
+
     public BoxBodyBuilder setRot(Vector3f rot) {
         this.rot = rot;
         return this;
+    }
+
+    public float getRotX() {
+        return rot.x;
     }
 
     public BoxBodyBuilder setRotX(float x) {
@@ -102,10 +122,18 @@ public class BoxBodyBuilder extends BodyBuilder {
         return this;
     }
 
+    public float getRotY() {
+        return rot.y;
+    }
+
     public BoxBodyBuilder setRotY(float y) {
         //FIXME
         this.rot.y = y;
         return this;
+    }
+
+    public float getRotZ() {
+        return rot.z;
     }
 
     public BoxBodyBuilder setRotZ(float z) {
@@ -114,9 +142,80 @@ public class BoxBodyBuilder extends BodyBuilder {
         return this;
     }
 
-    public BodyBuilder setImpulse(Vector3f impulse) {
+    public Vector3f getImpulse() {
+        return impulse;
+    }
+
+    public BoxBodyBuilder setImpulse(Vector3f impulse) {
         this.impulse = impulse;
         return this;
+    }
+
+    public float getImpulseX() {
+        return impulse.x;
+    }
+
+    public AbstractBodyBuilder setImpulseX(float x) {
+        this.impulse.x = x;
+        return this;
+    }
+
+    public float getImpulseY() {
+        return impulse.y;
+    }
+
+    public AbstractBodyBuilder setImpulseY(float y) {
+        this.impulse.y = y;
+        return this;
+    }
+
+    public float getImpulseZ() {
+        return impulse.z;
+    }
+
+    public AbstractBodyBuilder setImpulseZ(float z) {
+        this.impulse.z = z;
+        return this;
+    }
+
+    public Vector3f getSize() {
+        return size;
+    }
+
+    public BoxBodyBuilder setSize(Vector3f size) {
+        this.size = size;
+        return this;
+    }
+
+    public float getSizeX() {
+        return size.x;
+    }
+
+    public BoxBodyBuilder setSizeX(float x) {
+        this.size.x = x;
+        return this;
+    }
+
+    public float getSizeY() {
+        return size.y;
+    }
+
+    public BoxBodyBuilder setSizeY(float y) {
+        this.size.y = y;
+        return this;
+    }
+
+    public float getSizeZ() {
+        return size.z;
+    }
+
+    public BoxBodyBuilder setSizeZ(float z) {
+        this.size.z = z;
+        return this;
+    }
+
+    public Vector3f getColor() {
+        return color;
     }
 
     public BoxBodyBuilder setColor(Vector3f color) {
@@ -124,9 +223,17 @@ public class BoxBodyBuilder extends BodyBuilder {
         return this;
     }
 
+    public float getColorR() {
+        return color.x;
+    }
+
     public BoxBodyBuilder setColorR(float r) {
         this.color.x = r;
         return this;
+    }
+
+    public float getColorG() {
+        return color.y;
     }
 
     public BoxBodyBuilder setColorG(float g) {
@@ -134,14 +241,26 @@ public class BoxBodyBuilder extends BodyBuilder {
         return this;
     }
 
-    public BoxBodyBuilder setColorZ(float b) {
+    public float getColorB() {
+        return color.z;
+    }
+
+    public BoxBodyBuilder setColorB(float b) {
         this.color.z = b;
         return this;
+    }
+
+    public Texture getTexture() {
+        return texture;
     }
 
     public BoxBodyBuilder setTexture(Texture texture) {
         this.texture = texture;
         return this;
+    }
+
+    public Material getMaterial() {
+        return material;
     }
 
     public BoxBodyBuilder setMaterial(Material material) {
@@ -231,7 +350,8 @@ public class BoxBodyBuilder extends BodyBuilder {
         rigidBody.applyCentralImpulse(impulse);
         return new Body(
                 rigidBody,
-                list
+                list,
+                id
         );
     }
 }

@@ -1,6 +1,6 @@
 package model;
 
-import model.builder.BodyBuilder;
+import model.builder.AbstractBodyBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,21 +11,21 @@ import java.util.List;
  * @author Mike Sorokin
  */
 public class Level {
-    private List<BodyBuilder> bodies;
+    private List<AbstractBodyBuilder> bodies;
 
     public Level() {
         bodies = new ArrayList<>();
     }
 
-    public void addBody(BodyBuilder body) {
+    public void addBody(AbstractBodyBuilder body) {
         bodies.add(body);
     }
 
-    public void removeBody(BodyBuilder body) {
+    public void removeBody(AbstractBodyBuilder body) {
         bodies.remove(body);
     }
 
-    public List<BodyBuilder> getBodies() {
+    public List<AbstractBodyBuilder> getBodies() {
         return bodies;
     }
 }

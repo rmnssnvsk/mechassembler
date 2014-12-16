@@ -20,10 +20,12 @@ import javax.vecmath.Vector3f;
 public class Body {
     private RigidBody rigidBody;
     private DisplayList list;
+    public final String id;
 
-    public Body(RigidBody rigidBody, DisplayList list) {
+    public Body(RigidBody rigidBody, DisplayList list, String id) {
         this.rigidBody = rigidBody;
         this.list = list;
+        this.id = id;
     }
 
     public RigidBody getRigidBody() {

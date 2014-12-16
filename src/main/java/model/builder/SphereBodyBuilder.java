@@ -17,7 +17,6 @@ import javax.vecmath.Quat4f;
 import javax.vecmath.Vector3f;
 
 import static java.lang.Math.*;
-import static java.lang.Math.toRadians;
 import static org.lwjgl.opengl.GL11.*;
 
 /**
@@ -25,22 +24,34 @@ import static org.lwjgl.opengl.GL11.*;
  *
  * @author Mike Sorokin
  */
-public class SphereBodyBuilder extends BodyBuilder {
-    private float mass = 1;
-    private float restitution = .1f;
-    private float friction = 1;
+public class SphereBodyBuilder extends DefaultBodyBuilder {
+    protected float mass = 1;
+    protected float restitution = .1f;
+    protected float friction = 1;
+    protected Vector3f pos = new Vector3f(0, 0, 0);
+    protected Vector3f rot = new Vector3f(0, 0, 0);
+    protected Vector3f impulse = new Vector3f(0, 0, 0);
     private float radius = 1;
     private float angularDamping = .3f;
     private Texture texture = TextureLoader.NO_TEXTURE;
     private Material material = new MaterialBuilder().build();
-    private Vector3f pos = new Vector3f(0, 0, 0);
-    private Vector3f rot = new Vector3f(0, 0, 0);
-    private Vector3f impulse = new Vector3f(0, 0, 0);
     private Vector3f color = new Vector3f(1, 1, 1);
+
+    public SphereBodyBuilder(String id) {
+        super(id);
+    }
+
+    public float getMass() {
+        return mass;
+    }
 
     public SphereBodyBuilder setMass(float mass) {
         this.mass = mass;
         return this;
+    }
+
+    public float getRestitution() {
+        return restitution;
     }
 
     public SphereBodyBuilder setRestitution(float restitution) {
@@ -48,19 +59,17 @@ public class SphereBodyBuilder extends BodyBuilder {
         return this;
     }
 
+    public float getFriction() {
+        return friction;
+    }
+
     public SphereBodyBuilder setFriction(float friction) {
         this.friction = friction;
         return this;
     }
 
-    public SphereBodyBuilder setAngularDamping(float angularDamping) {
-        this.angularDamping = angularDamping;
-        return this;
-    }
-
-    public SphereBodyBuilder setRadius(float radius) {
-        this.radius = radius;
-        return this;
+    public Vector3f getPos() {
+        return pos;
     }
 
     public SphereBodyBuilder setPos(Vector3f pos) {
@@ -68,9 +77,17 @@ public class SphereBodyBuilder extends BodyBuilder {
         return this;
     }
 
+    public float getPosX() {
+        return pos.x;
+    }
+
     public SphereBodyBuilder setPosX(float x) {
         this.pos.x = x;
         return this;
+    }
+
+    public float getPosY() {
+        return pos.y;
     }
 
     public SphereBodyBuilder setPosY(float y) {
@@ -78,14 +95,26 @@ public class SphereBodyBuilder extends BodyBuilder {
         return this;
     }
 
+    public float getPosZ() {
+        return pos.z;
+    }
+
     public SphereBodyBuilder setPosZ(float z) {
         this.pos.z = z;
         return this;
     }
 
+    public Vector3f getRot() {
+        return rot;
+    }
+
     public SphereBodyBuilder setRot(Vector3f rot) {
         this.rot = rot;
         return this;
+    }
+
+    public float getRotX() {
+        return rot.x;
     }
 
     public SphereBodyBuilder setRotX(float x) {
@@ -94,10 +123,18 @@ public class SphereBodyBuilder extends BodyBuilder {
         return this;
     }
 
+    public float getRotY() {
+        return rot.y;
+    }
+
     public SphereBodyBuilder setRotY(float y) {
         //FIXME
         this.rot.y = y;
         return this;
+    }
+
+    public float getRotZ() {
+        return rot.z;
     }
 
     public SphereBodyBuilder setRotZ(float z) {
@@ -106,9 +143,62 @@ public class SphereBodyBuilder extends BodyBuilder {
         return this;
     }
 
-    public BodyBuilder setImpulse(Vector3f impulse) {
+    public Vector3f getImpulse() {
+        return impulse;
+    }
+
+    public SphereBodyBuilder setImpulse(Vector3f impulse) {
         this.impulse = impulse;
         return this;
+    }
+
+    public float getImpulseX() {
+        return impulse.x;
+    }
+
+    public AbstractBodyBuilder setImpulseX(float x) {
+        this.impulse.x = x;
+        return this;
+    }
+
+    public float getImpulseY() {
+        return impulse.y;
+    }
+
+    public AbstractBodyBuilder setImpulseY(float y) {
+        this.impulse.y = y;
+        return this;
+    }
+
+    public float getImpulseZ() {
+        return impulse.z;
+    }
+
+    public AbstractBodyBuilder setImpulseZ(float z) {
+        this.impulse.z = z;
+        return this;
+    }
+
+    public float getAngularDamping() {
+        return angularDamping;
+    }
+
+    public SphereBodyBuilder setAngularDamping(float angularDamping) {
+        this.angularDamping = angularDamping;
+        return this;
+    }
+
+    public float getRadius() {
+        return radius;
+    }
+
+    public SphereBodyBuilder setRadius(float radius) {
+        this.radius = radius;
+        return this;
+    }
+
+    public Vector3f getColor() {
+        return color;
     }
 
     public SphereBodyBuilder setColor(Vector3f color) {
@@ -116,9 +206,17 @@ public class SphereBodyBuilder extends BodyBuilder {
         return this;
     }
 
+    public float getColorR() {
+        return color.x;
+    }
+
     public SphereBodyBuilder setColorR(float r) {
         this.color.x = r;
         return this;
+    }
+
+    public float getColorG() {
+        return color.y;
     }
 
     public SphereBodyBuilder setColorG(float g) {
@@ -126,14 +224,26 @@ public class SphereBodyBuilder extends BodyBuilder {
         return this;
     }
 
-    public SphereBodyBuilder setColorZ(float b) {
+    public float getColorB() {
+        return color.z;
+    }
+
+    public SphereBodyBuilder setColorB(float b) {
         this.color.z = b;
         return this;
+    }
+
+    public Texture getTexture() {
+        return texture;
     }
 
     public SphereBodyBuilder setTexture(Texture texture) {
         this.texture = texture;
         return this;
+    }
+
+    public Material getMaterial() {
+        return material;
     }
 
     public SphereBodyBuilder setMaterial(Material material) {
@@ -201,7 +311,8 @@ public class SphereBodyBuilder extends BodyBuilder {
         rigidBody.applyCentralImpulse(impulse);
         return new Body(
                 rigidBody,
-                list
+                list,
+                id
         );
     }
 }

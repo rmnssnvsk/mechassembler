@@ -3,8 +3,8 @@ package util;
 import com.bulletphysics.collision.shapes.CompoundShape;
 import com.bulletphysics.collision.shapes.TriangleShape;
 import com.bulletphysics.linearmath.Transform;
-import model.Body;
-import model.builder.BodyBuilder;
+import model.builder.AbstractBodyBuilder;
+import model.builder.DefaultBodyBuilder;
 import model.builder.MaterialBuilder;
 
 import javax.vecmath.Matrix4f;
@@ -24,7 +24,7 @@ import static org.lwjgl.opengl.GL11.*;
  */
 public class OBJModelLoader {
 
-    public static BodyBuilder load(String name) throws IOException {
+    public static AbstractBodyBuilder load(String name, String id) throws IOException {
         ArrayList<Vector3f> vertices = new ArrayList<>();
         ArrayList<Vector3f> normals = new ArrayList<>();
         ArrayList<Vector2f> textures = new ArrayList<>();
@@ -122,7 +122,7 @@ public class OBJModelLoader {
             }
         }
 
-        return new BodyBuilder()
+        return new DefaultBodyBuilder(id)
                 .setCollisionShape(shape)
                 .setDisplayList(list.code);
     }

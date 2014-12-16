@@ -9,6 +9,7 @@ import com.bulletphysics.dynamics.DiscreteDynamicsWorld;
 import com.bulletphysics.dynamics.DynamicsWorld;
 import com.bulletphysics.dynamics.constraintsolver.ConstraintSolver;
 import com.bulletphysics.dynamics.constraintsolver.SequentialImpulseConstraintSolver;
+import model.builder.AbstractBodyBuilder;
 import view.Camera;
 
 import javax.vecmath.Vector3f;
@@ -50,6 +51,7 @@ public class Model extends Observable {
 
     /**
      * Создает и инициализирует модель.
+     *
      * @param gravity вектор ускорения свободного падения
      */
     public Model(Camera camera, Vector3f gravity, Level level) {
@@ -82,6 +84,7 @@ public class Model extends Observable {
 
     /**
      * Обновляет состояние симуляции.
+     *
      * @param t промежуток времени в секундах.
      */
     private void update(float t) {
@@ -90,7 +93,7 @@ public class Model extends Observable {
             world.stepSimulation(t);
         }
         setChanged();
-        notifyObservers();
+        notifyObservers(t);
     }
 
     private void load() {
@@ -105,36 +108,50 @@ public class Model extends Observable {
     }
 
     /**
-     * Устанавливает вектор свободного падения.
-     * @param gravity новый вектор ускорения свободного падения
-     */
-    public void setGravity(Vector3f gravity) {
-        world.setGravity(gravity);
-    }
-
-    /**
      * Возвращает текущий вектор ускорения свободгого падения.
+     *
      * @return текущий вектор ускорения свободгого падения
      */
     public Vector3f getGravity() {
         return world.getGravity(new Vector3f());
     }
 
-    public DynamicsWorld getWorld() {
-        return world;
+    /**
+     * Устанавливает вектор свободного падения.
+     *
+     * @param gravity новый вектор ускорения свободного падения
+     */
+    public void setGravity(Vector3f gravity) {
+        world.setGravity(gravity);
     }
 
-    public void setRunState(RunState state) {
-        reload();
-        this.runState = state;
+    public DynamicsWorld getWorld() {
+        return world;
     }
 
     public RunState getRunState() {
         return runState;
     }
 
+    public void setRunState(RunState state) {
+        if (state == RunState.CONF) {
+            reload();
+        }
+        this.runState = state;
+    }
+
     public List<Body> getBodies() {
         return bodies;
+    }
+
+    public void reloadBodyById(String id) {
+        for (int i = 0; i < bodies.size(); i++) {
+            if (bodies.get(i).id.equals(id)) {
+                world.removeRigidBody(bodies.get(i).getRigidBody());
+                bodies.set(i, ((AbstractBodyBuilder) bodies.get(i).getRigidBody().getUserPointer()).build());
+                world.addRigidBody(bodies.get(i).getRigidBody());
+            }
+        }
     }
 
     public void delete() {
