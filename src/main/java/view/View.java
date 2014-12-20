@@ -30,7 +30,7 @@ public class View extends Observable {
     private Camera camera;
     private Program program = null;
     private int width, height;
-    private boolean drawAxes, confEnabled;
+    private boolean drawAxes, confEnabled, mouseGrabbed;
 
     public View(DisplayMode displayMode,
                 boolean fullscreen,
@@ -50,7 +50,7 @@ public class View extends Observable {
             }
             Display.setVSyncEnabled(vSync);
             Display.setResizable(resizable);
-            Mouse.setGrabbed(mouseGrabbed);
+            Mouse.setGrabbed(this.mouseGrabbed = mouseGrabbed);
             Display.setTitle(title);
             Display.create();
         } catch (LWJGLException e) {
@@ -210,5 +210,9 @@ public class View extends Observable {
 
     public Camera getCamera() {
         return camera;
+    }
+
+    public boolean getMouseGrabbed() {
+        return mouseGrabbed;
     }
 }
