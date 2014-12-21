@@ -39,6 +39,7 @@ public class SetParamsOfObjectDialog extends JDialog {
             }
         }
 
+        setLocationRelativeTo(null);
         setContentPane(contentPane);
         setModal(true);
         getRootPane().setDefaultButton(buttonOK);
