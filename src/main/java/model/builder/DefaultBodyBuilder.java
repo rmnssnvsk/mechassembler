@@ -22,6 +22,8 @@ public class DefaultBodyBuilder extends AbstractBodyBuilder {
 
     @Override
     public void change() {
-        new SetParamsOfObjectDialog(changeableParams, this);
+        if(changeableParams.size() > 0) {
+            new SetParamsOfObjectDialog(changeableParams, this);
+        }
     }
 }
