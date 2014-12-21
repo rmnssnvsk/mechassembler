@@ -1,9 +1,6 @@
 package model.builder;
 
-import forms.ChangeParamFormDialog;
-
-import javax.swing.*;
-import java.lang.reflect.InvocationTargetException;
+import formsdialogs.setparamsofobjectdialog.SetParamsOfObjectDialog;
 import java.util.LinkedList;
 
 /**
@@ -25,6 +22,6 @@ public class DefaultBodyBuilder extends AbstractBodyBuilder {
 
     @Override
     public void change() {
-        new ChangeParamFormDialog(changeableParams, this);
+        new SetParamsOfObjectDialog(changeableParams, this);
     }
 }
