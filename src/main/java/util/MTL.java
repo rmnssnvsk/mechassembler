@@ -21,7 +21,7 @@ class MTL {
     HashMap<String, Style> styles;
 
     public MTL(String filename) throws IOException {
-        BufferedReader reader = new BufferedReader(new FileReader(new ResourceLoader("models/" + filename).getFile()));
+        BufferedReader reader = new BufferedReader(new FileReader(new ResourceLoader(filename).getFile()));
         String line;
         styles = new HashMap<>();
         String curStyleName;

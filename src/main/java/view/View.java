@@ -30,7 +30,7 @@ public class View extends Observable {
     private Camera camera;
     private Program program = null;
     private int width, height;
-    private boolean drawAxes, confEnabled;
+    private boolean drawAxes, confEnabled, mouseGrabbed;
 
     public View(DisplayMode displayMode,
                 boolean fullscreen,
@@ -39,7 +39,8 @@ public class View extends Observable {
                 boolean mouseGrabbed,
                 String title,
                 Camera camera,
-                String program,
+                String vertexShaderName,
+                String fragmentShaderName,
                 boolean drawAxes,
                 boolean confEnabled) {
         try {
@@ -50,7 +51,7 @@ public class View extends Observable {
             }
             Display.setVSyncEnabled(vSync);
             Display.setResizable(resizable);
-            Mouse.setGrabbed(mouseGrabbed);
+            Mouse.setGrabbed(this.mouseGrabbed = mouseGrabbed);
             Display.setTitle(title);
             Display.create();
         } catch (LWJGLException e) {
@@ -66,10 +67,10 @@ public class View extends Observable {
         glLight(GL_LIGHT0, GL_POSITION, asFloatBuffer(0, 0, -60, 1));
         glDepthFunc(GL_LEQUAL);
         glShadeModel(GL_SMOOTH);
-        if (program == null) {
-            Program.useDummy();
+        if (vertexShaderName == null | fragmentShaderName == null) {
+            this.program = Program.DUMMY;
         } else {
-            this.program = new Program(program);
+            this.program = new Program(vertexShaderName, fragmentShaderName);
         }
         this.drawAxes = drawAxes;
         this.confEnabled = confEnabled;
@@ -141,6 +142,7 @@ public class View extends Observable {
             glEnd();
             bodies.stream().forEach(body -> {
                 Vector3f c = body.getRigidBody().getWorldTransform(new Transform()).origin;
+                Vector3f v = body.getRigidBody().getLinearVelocity(new Vector3f());
                 glBegin(GL_LINES);
                 glColor3f(1, 0, 0);
                 glVertex3f(c.x, c.y, c.z);
@@ -151,6 +153,9 @@ public class View extends Observable {
                 glColor3f(0, 0, 1);
                 glVertex3f(c.x, c.y, c.z);
                 glVertex3f(0, 0, c.z);
+                glColor3f(1, 1, 0);
+                glVertex3f(c.x, c.y, c.z);
+                glVertex3f(c.x + v.x, c.y + v.y, c.z + v.z);
                 glEnd();
             });
         }
@@ -210,5 +215,9 @@ public class View extends Observable {
 
     public Camera getCamera() {
         return camera;
+    }
+
+    public boolean getMouseGrabbed() {
+        return mouseGrabbed;
     }
 }

@@ -16,18 +16,18 @@ public class MaterialBuilder {
     private Vector4f specular = new Vector4f(1, 1, 1, 1);
     private float shininess = 128;
 
-    public MaterialBuilder setAmbient(Vector4f ambient) {
-        this.ambient = ambient;
+    public MaterialBuilder setAmbient(Vector3f ambient) {
+        this.ambient = new Vector4f(ambient.x, ambient.y, ambient.z, 1);
         return this;
     }
 
-    public MaterialBuilder setDiffuse(Vector4f diffuse) {
-        this.diffuse = diffuse;
+    public MaterialBuilder setDiffuse(Vector3f diffuse) {
+        this.diffuse = new Vector4f(diffuse.x, diffuse.y, diffuse.z, 1);
         return this;
     }
 
-    public MaterialBuilder setSpecular(Vector4f specular) {
-        this.specular = specular;
+    public MaterialBuilder setSpecular(Vector3f specular) {
+        this.specular = new Vector4f(specular.x, specular.y, specular.z, 1);
         return this;
     }
 

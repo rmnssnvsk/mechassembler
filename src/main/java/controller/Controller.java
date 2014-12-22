@@ -5,6 +5,7 @@ import model.GoalListener;
 import model.Model;
 import model.RunState;
 import model.builder.AbstractBodyBuilder;
+import org.lwjgl.input.Mouse;
 import view.View;
 import view.event.CloseRequestedViewEvent;
 import view.event.PropertyChangeRequestViewEvent;
@@ -56,7 +57,9 @@ public class Controller implements Observer {
                     CollisionWorld.ClosestRayResultCallback callback = new CollisionWorld.ClosestRayResultCallback(begin, end);
                     model.getWorld().rayTest(begin, end, callback);
                     if (callback.hasHit()) {
+                        Mouse.setGrabbed(false);
                         ((AbstractBodyBuilder) callback.collisionObject.getUserPointer()).change();
+                        Mouse.setGrabbed(view.getMouseGrabbed());
                     }
                     model.reloadBodyById(((AbstractBodyBuilder) callback.collisionObject.getUserPointer()).id);
                 } else if (e instanceof StateChangeRequestedViewEvent) {

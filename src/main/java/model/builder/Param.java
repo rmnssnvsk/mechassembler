@@ -7,7 +7,7 @@ import java.util.Arrays;
  *
  * @author Mike Sorokin
  */
-class Param {
+public class Param {
     public final String name;
     public final float low, hig;
     public final String setterName, getterName;

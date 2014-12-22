@@ -2,6 +2,7 @@ package model;
 
 import model.builder.AbstractBodyBuilder;
 
+import javax.vecmath.Vector3f;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,9 +13,16 @@ import java.util.List;
  */
 public class Level {
     private List<AbstractBodyBuilder> bodies;
+    private Vector3f gravity;
 
-    public Level() {
+    public Level() { // TODO: goal
         bodies = new ArrayList<>();
+        gravity = new Vector3f(0, -10, 0);
+    }
+
+    public Level(Vector3f gravity) {
+        bodies = new ArrayList<>();
+        this.gravity = gravity;
     }
 
     public void addBody(AbstractBodyBuilder body) {
@@ -27,5 +35,9 @@ public class Level {
 
     public List<AbstractBodyBuilder> getBodies() {
         return bodies;
+    }
+
+    public Vector3f getGravity() {
+        return gravity;
     }
 }

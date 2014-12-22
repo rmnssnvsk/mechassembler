@@ -24,10 +24,6 @@ import java.util.Observable;
  * @author Mike Sorokin
  */
 public class Model extends Observable {
-    /**
-     * Вектор ускорения свободного падения по умолчанию.
-     */
-    public static final Vector3f DEFAULT_GRAVITY = new Vector3f(0, -10, 0);
 
     /**
      * Мир, где происходит симуляция
@@ -42,19 +38,9 @@ public class Model extends Observable {
     private RunState runState = RunState.CONF;
 
     /**
-     * Создает и инициализирует модель. В качестве векора ускорения свободгого падения
-     * используется {@link Model#DEFAULT_GRAVITY}
+     * Создает и инициализирует модель.
      */
     public Model(Camera camera, Level level) {
-        this(camera, DEFAULT_GRAVITY, level);
-    }
-
-    /**
-     * Создает и инициализирует модель.
-     *
-     * @param gravity вектор ускорения свободного падения
-     */
-    public Model(Camera camera, Vector3f gravity, Level level) {
         this.bodies = new ArrayList<>();
         this.camera = camera;
         this.level = level;
@@ -63,7 +49,7 @@ public class Model extends Observable {
         CollisionDispatcher collisionDispatcher = new CollisionDispatcher(collisionConfiguration);
         ConstraintSolver constraintSolver = new SequentialImpulseConstraintSolver();
         world = new DiscreteDynamicsWorld(collisionDispatcher, broadphaseInterface, constraintSolver, collisionConfiguration);
-        world.setGravity(gravity);
+        world.setGravity(level.getGravity());
     }
 
     public void start() {

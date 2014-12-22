@@ -18,7 +18,8 @@ public class ViewBuilder {
     private boolean mouseGrabbed = false;
     private String title = "Window";
     private Camera camera = new CameraBuilder().build();
-    private String program = null;
+    private String vertexShaderName = null;
+    private String fragmentShaderName = null;
     private boolean drawAxes = false;
     private boolean confEnabled = true;
 
@@ -62,8 +63,13 @@ public class ViewBuilder {
         return this;
     }
 
-    public ViewBuilder setProgram(String program) {
-        this.program = program;
+    public ViewBuilder setVertexShaderName(String vertexShaderName) {
+        this.vertexShaderName = vertexShaderName;
+        return this;
+    }
+
+    public ViewBuilder setFragmentShaderName(String fragmentShaderName) {
+        this.fragmentShaderName = fragmentShaderName;
         return this;
     }
 
@@ -78,6 +84,6 @@ public class ViewBuilder {
     }
 
     public View build() {
-        return new View(new DisplayMode(x, y), fullscreen, vSync, resizable, mouseGrabbed, title, camera, program, drawAxes, confEnabled);
+        return new View(new DisplayMode(x, y), fullscreen, vSync, resizable, mouseGrabbed, title, camera, vertexShaderName, fragmentShaderName, drawAxes, confEnabled);
     }
 }

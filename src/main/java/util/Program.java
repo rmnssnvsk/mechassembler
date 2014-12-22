@@ -11,14 +11,14 @@ import static org.lwjgl.opengl.GL20.*;
 public class Program {
     private Shader vertex, fragment;
     public final int program;
-    private static Program dummy;
+    public static final Program DUMMY = new Program("shaders/dummy.vert", "shaders/dummy.frag");;
 
-    public Program(String shaderName) {
+    public Program(String vertexShaderName, String fragmentShaderName) {
         program = glCreateProgram();
         try {
-            vertex = new Shader(shaderName, Shader.VERTEX);
+            vertex = new Shader(vertexShaderName, Shader.VERTEX);
             glAttachShader(program, vertex.getShader());
-            fragment = new Shader(shaderName, Shader.FRAGMENT);
+            fragment = new Shader(fragmentShaderName, Shader.FRAGMENT);
             glAttachShader(program, fragment.getShader());
         } catch (IOException e) {
             e.printStackTrace();
@@ -31,10 +31,7 @@ public class Program {
     }
 
     public static void useDummy() {
-        if (dummy == null) {
-            dummy = new Program("dummy");
-        }
-        dummy.use();
+        DUMMY.use();
     }
 
     public void use() {

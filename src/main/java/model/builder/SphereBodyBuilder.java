@@ -156,7 +156,7 @@ public class SphereBodyBuilder extends DefaultBodyBuilder {
         return impulse.x;
     }
 
-    public AbstractBodyBuilder setImpulseX(float x) {
+    public SphereBodyBuilder setImpulseX(float x) {
         this.impulse.x = x;
         return this;
     }
@@ -165,7 +165,7 @@ public class SphereBodyBuilder extends DefaultBodyBuilder {
         return impulse.y;
     }
 
-    public AbstractBodyBuilder setImpulseY(float y) {
+    public SphereBodyBuilder setImpulseY(float y) {
         this.impulse.y = y;
         return this;
     }
@@ -174,7 +174,7 @@ public class SphereBodyBuilder extends DefaultBodyBuilder {
         return impulse.z;
     }
 
-    public AbstractBodyBuilder setImpulseZ(float z) {
+    public SphereBodyBuilder setImpulseZ(float z) {
         this.impulse.z = z;
         return this;
     }

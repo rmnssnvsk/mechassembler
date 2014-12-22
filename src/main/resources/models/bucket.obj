@@ -1,6 +1,6 @@
 # Blender v2.72 (sub 0) OBJ File: 'untitled.blend'
 # www.blender.org
-mtllib bucket.mtl
+mtllib models/bucket.mtl
 o Cone
 v -0.148847 3.273721 -2.814515
 v -0.539028 3.273721 -2.776086
