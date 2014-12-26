@@ -35,14 +35,14 @@ public class Main {
         View view = new ViewBuilder()
                 .setX(1366)
                 .setY(768)
-                .setMouseGrabbed(true)
+//                .setMouseGrabbed(true)
                 .setTitle("Mechassembler")
                 .setCamera(camera)
                 .setVertexShaderName("shaders/light.vert")
                 .setFragmentShaderName("shaders/light.frag")
                 .build();
 
-        Level level = LevelParser.parse(new ResourceLoader("levels/level1.lvl").getFile());
+        Level level = LevelParser.parse(new ResourceLoader("levels/level1.xml").getFile());
 
         Model model = new Model(camera, level);
 
