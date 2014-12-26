@@ -35,7 +35,7 @@ public class Main {
         View view = new ViewBuilder()
                 .setX(1366)
                 .setY(768)
-//                .setMouseGrabbed(true)
+                .setMouseGrabbed(true)
                 .setTitle("Mechassembler")
                 .setCamera(camera)
                 .setVertexShaderName("shaders/light.vert")
