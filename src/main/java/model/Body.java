@@ -1,16 +1,7 @@
 package model;
 
-import com.bulletphysics.collision.shapes.CollisionShape;
 import com.bulletphysics.dynamics.RigidBody;
-import com.bulletphysics.dynamics.RigidBodyConstructionInfo;
-import com.bulletphysics.linearmath.MotionState;
-import org.lwjgl.Sys;
-import org.lwjgl.opengl.GL11;
-import org.newdawn.slick.UnicodeFont;
-import org.newdawn.slick.opengl.Texture;
 import util.DisplayList;
-
-import javax.vecmath.Vector3f;
 
 /**
  * Created on 10/21/14.
@@ -18,9 +9,9 @@ import javax.vecmath.Vector3f;
  * @author Mike Sorokin
  */
 public class Body {
+    public final String id;
     private RigidBody rigidBody;
     private DisplayList list;
-    public final String id;
 
     public Body(RigidBody rigidBody, DisplayList list, String id) {
         this.rigidBody = rigidBody;

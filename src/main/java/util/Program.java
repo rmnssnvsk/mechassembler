@@ -9,9 +9,9 @@ import java.nio.IntBuffer;
 import static org.lwjgl.opengl.GL20.*;
 
 public class Program {
-    private Shader vertex, fragment;
+    public static final Program DUMMY = new Program("shaders/dummy.vert", "shaders/dummy.frag");
     public final int program;
-    public static final Program DUMMY = new Program("shaders/dummy.vert", "shaders/dummy.frag");;
+    private Shader vertex, fragment;
 
     public Program(String vertexShaderName, String fragmentShaderName) {
         program = glCreateProgram();

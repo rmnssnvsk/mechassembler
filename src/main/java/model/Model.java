@@ -10,6 +10,8 @@ import com.bulletphysics.dynamics.DynamicsWorld;
 import com.bulletphysics.dynamics.constraintsolver.ConstraintSolver;
 import com.bulletphysics.dynamics.constraintsolver.SequentialImpulseConstraintSolver;
 import model.builder.AbstractBodyBuilder;
+import model.event.GoalReachedModelEvent;
+import model.event.ModelEvent;
 import view.Camera;
 
 import javax.vecmath.Vector3f;
@@ -78,8 +80,12 @@ public class Model extends Observable {
         if (runState == RunState.TEST) {
             world.stepSimulation(t);
         }
+        List<ModelEvent> events = new ArrayList<>();
+        if (level.getGoal().isGoalReached(bodies, t)) {
+            events.add(new GoalReachedModelEvent(this));
+        }
         setChanged();
-        notifyObservers(t);
+        notifyObservers(events);
     }
 
     private void load() {

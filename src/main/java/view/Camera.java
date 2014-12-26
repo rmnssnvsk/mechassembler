@@ -3,6 +3,7 @@ package view;
 import org.lwjgl.util.glu.GLU;
 
 import javax.vecmath.Vector3f;
+
 import static org.lwjgl.opengl.GL11.*;
 
 /**
@@ -29,7 +30,7 @@ public abstract class Camera {
         GLU.gluPerspective(fov, aspect, zNear, zFar);
         glMatrixMode(GL_MODELVIEW);
     }
-    
+
     public void applyViewMatrix() {
         glRotatef(rot.x, 1, 0, 0);
         glRotatef(rot.y, 0, 1, 0);

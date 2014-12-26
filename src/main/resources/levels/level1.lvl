@@ -94,4 +94,10 @@
             <filename>models/bucket.obj</filename>
         </objmodel>
     </bodies>
+    <goal>
+        <id1>ball</id1>
+        <id2>bucket</id2>
+        <distance>2</distance>
+        <time>3</time>
+    </goal>
 </simulation>

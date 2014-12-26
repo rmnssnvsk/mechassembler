@@ -7,14 +7,11 @@ import model.builder.AbstractBodyBuilder;
 import model.builder.Param;
 
 import javax.swing.*;
-import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
-import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableModel;
 import java.awt.*;
 import java.awt.event.*;
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayDeque;
 import java.util.LinkedList;
 import java.util.List;
 

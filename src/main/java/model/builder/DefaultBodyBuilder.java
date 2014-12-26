@@ -6,13 +6,13 @@ import com.bulletphysics.dynamics.RigidBody;
 import com.bulletphysics.dynamics.RigidBodyConstructionInfo;
 import com.bulletphysics.linearmath.DefaultMotionState;
 import com.bulletphysics.linearmath.Transform;
+import formsdialogs.setparamsofobjectdialog.SetParamsOfObjectDialog;
 import model.Body;
 import util.DisplayList;
 
 import javax.vecmath.Matrix4f;
 import javax.vecmath.Quat4f;
 import javax.vecmath.Vector3f;
-import formsdialogs.setparamsofobjectdialog.SetParamsOfObjectDialog;
 import java.util.LinkedList;
 
 /**
@@ -224,7 +224,7 @@ public class DefaultBodyBuilder extends AbstractBodyBuilder {
 
     @Override
     public void change() {
-        if(changeableParams.size() > 0) {
+        if (changeableParams.size() > 0) {
             new SetParamsOfObjectDialog(changeableParams, this);
         }
     }

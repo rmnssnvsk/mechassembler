@@ -1,7 +1,6 @@
 package main;
 
 import controller.Controller;
-import model.GoalListener;
 import model.Level;
 import model.Model;
 import parser.LevelParser;
@@ -48,11 +47,8 @@ public class Main {
         Model model = new Model(camera, level);
 
         Controller controller = new Controller(model, view);
-        GoalListener listener = new GoalListener("ball", "bucket", 2, 3);
         model.addObserver(controller);
-        model.addObserver(listener);
         view.addObserver(controller);
-        listener.addObserver(controller);
 
         model.start();
         model.delete();

@@ -14,15 +14,18 @@ import java.util.List;
 public class Level {
     private List<AbstractBodyBuilder> bodies;
     private Vector3f gravity;
+    private GoalListener goal;
 
-    public Level() { // TODO: goal
+    public Level(GoalListener goal) {
         bodies = new ArrayList<>();
         gravity = new Vector3f(0, -10, 0);
+        this.goal = goal;
     }
 
-    public Level(Vector3f gravity) {
+    public Level(Vector3f gravity, GoalListener goal) {
         bodies = new ArrayList<>();
         this.gravity = gravity;
+        this.goal = goal;
     }
 
     public void addBody(AbstractBodyBuilder body) {
@@ -39,5 +42,9 @@ public class Level {
 
     public Vector3f getGravity() {
         return gravity;
+    }
+
+    public GoalListener getGoal() {
+        return goal;
     }
 }

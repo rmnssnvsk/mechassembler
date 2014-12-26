@@ -6,6 +6,7 @@ import java.util.Random;
 
 /**
  * Created on 22.11.14.
+ *
  * @author Roman Sosnovsky
  */
 public class ResourceLoader {

@@ -1,10 +1,11 @@
 package controller;
 
 import com.bulletphysics.collision.dispatch.CollisionWorld;
-import model.GoalListener;
 import model.Model;
 import model.RunState;
 import model.builder.AbstractBodyBuilder;
+import model.event.GoalReachedModelEvent;
+import model.event.ModelEvent;
 import org.lwjgl.input.Mouse;
 import view.View;
 import view.event.CloseRequestedViewEvent;
@@ -38,6 +39,14 @@ public class Controller implements Observer {
     public void update(Observable o, Object arg) {
         if (o instanceof Model) {
             view.show(model.getBodies());
+            //noinspection unchecked
+            List<ModelEvent> events = (List<ModelEvent>) arg;
+            events.stream().forEach(e -> {
+                if (e instanceof GoalReachedModelEvent) {
+                    model.stop();
+                    JOptionPane.showMessageDialog(null, "You win!");
+                }
+            });
         } else if (o instanceof View) {
             //noinspection unchecked
             List<ViewEvent> events = (List<ViewEvent>) arg;
@@ -70,9 +79,6 @@ public class Controller implements Observer {
                     }
                 }
             });
-        } else if (o instanceof GoalListener) {
-            model.stop();
-            JOptionPane.showMessageDialog(null, "You win!");
         }
     }
 }

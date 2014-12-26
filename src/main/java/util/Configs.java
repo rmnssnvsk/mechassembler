@@ -7,6 +7,7 @@ import java.util.HashMap;
 
 /**
  * Created on 17.05.2014.
+ *
  * @author Mike Sorokin
  */
 public class Configs {

@@ -16,8 +16,6 @@ import javax.vecmath.Quat4f;
 import javax.vecmath.Vector3f;
 
 import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL11.glEnd;
-import static org.lwjgl.opengl.GL11.glVertex3f;
 
 /**
  * Created on 12/20/14.
@@ -272,12 +270,12 @@ public class PlaneBodyBuilder extends DefaultBodyBuilder {
     public float getDst() {
         return dst;
     }
-    
+
     public PlaneBodyBuilder setDst(float dst) {
         this.dst = dst;
         return this;
     }
-    
+
     public Body build() {
         Vector3f inertia = new Vector3f(0, 0, 0);
         CollisionShape shape = new StaticPlaneShape(normal, dst);

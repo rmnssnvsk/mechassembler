@@ -1,5 +1,6 @@
 package parser;
 
+import model.GoalListener;
 import model.Level;
 import model.Material;
 import model.builder.*;
@@ -48,6 +49,10 @@ public class LevelParser {
         return TextureLoader.load(parseTexture.filename);
     }
 
+    private static GoalListener toGoalListener(ParseGoal goal) {
+        return new GoalListener(goal.id1, goal.id2, goal.distance, goal.time);
+    }
+
     private static DefaultBodyBuilder toBoxBodyBuilder(ParseBox body) {
         BoxBodyBuilder builder = new BoxBodyBuilder(body.id);
         if (body.texture != null) {
@@ -66,8 +71,7 @@ public class LevelParser {
     }
 
     private static DefaultBodyBuilder toOBJBodyBuilder(ParseOBJModel body) {
-        DefaultBodyBuilder builder = OBJModelLoader.load(body.filename, body.id);
-        return builder;
+        return OBJModelLoader.load(body.filename, body.id);
     }
 
     private static DefaultBodyBuilder toPlaneBodyBuilder(ParsePlane body) {
@@ -145,7 +149,8 @@ public class LevelParser {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        Level level = new Level(toVector3f(sim.gravity));
+        assert sim != null;
+        Level level = new Level(toVector3f(sim.gravity), toGoalListener(sim.goal));
         materials = new HashMap<>();
         for (ParseMaterial parseMaterial : sim.materials) {
             materials.put(parseMaterial.name, toMaterial(parseMaterial));

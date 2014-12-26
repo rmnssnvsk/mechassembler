@@ -10,7 +10,10 @@ import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import util.Program;
-import view.event.*;
+import view.event.CloseRequestedViewEvent;
+import view.event.PropertyChangeRequestViewEvent;
+import view.event.StateChangeRequestedViewEvent;
+import view.event.ViewEvent;
 
 import javax.vecmath.Vector3f;
 import java.nio.FloatBuffer;
@@ -19,7 +22,8 @@ import java.util.List;
 import java.util.Observable;
 
 import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL20.*;
+import static org.lwjgl.opengl.GL20.glGetUniformLocation;
+import static org.lwjgl.opengl.GL20.glUniformMatrix4;
 
 /**
  * Класс представления. Представление умеет визуализировать симуляцию.

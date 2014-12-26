@@ -4,6 +4,7 @@ import static org.lwjgl.opengl.GL11.*;
 
 /**
  * Created on 17.05.2014.
+ *
  * @author Mike Sorokin
  */
 public class DisplayList {

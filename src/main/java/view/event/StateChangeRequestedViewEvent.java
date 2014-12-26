@@ -10,6 +10,7 @@ import view.View;
  */
 public class StateChangeRequestedViewEvent extends ViewEvent {
     public RunState state;
+
     /**
      * Constructs a prototypical Event.
      *

@@ -1,6 +1,5 @@
 package view.builder;
 
-import org.lwjgl.Sys;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
@@ -118,9 +117,9 @@ public class CameraBuilder {
                     rot.y += Mouse.getDX() * mouse;
                     rot.x -= Mouse.getDY() * mouse;
                     if (rot.x > 90)
-                    rot.x = 90;
+                        rot.x = 90;
                     if (rot.x < -90)
-                    rot.x = -90;
+                        rot.x = -90;
                 }
             };
         } else {

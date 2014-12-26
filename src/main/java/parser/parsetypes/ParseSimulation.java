@@ -19,6 +19,9 @@ public class ParseSimulation {
     public List<ParseMaterial> materials;
 
     @Element
+    public ParseGoal goal;
+
+    @Element
     public BodyList bodies;
 
     @Override
@@ -27,6 +30,7 @@ public class ParseSimulation {
                 "gravity=" + gravity +
                 ", textures=" + textures +
                 ", materials=" + materials +
+                ", goal=" + goal +
                 ", bodies=" + bodies +
                 '}';
     }

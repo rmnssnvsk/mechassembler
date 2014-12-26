@@ -2,11 +2,11 @@ package util;
 
 import org.newdawn.slick.opengl.Texture;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 
 /**
  * Created on 10.05.2014.
+ *
  * @author Mike Sorokin
  */
 public class TextureLoader {

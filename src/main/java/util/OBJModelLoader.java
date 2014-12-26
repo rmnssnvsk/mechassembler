@@ -3,7 +3,6 @@ package util;
 import com.bulletphysics.collision.shapes.CompoundShape;
 import com.bulletphysics.collision.shapes.TriangleShape;
 import com.bulletphysics.linearmath.Transform;
-import model.builder.AbstractBodyBuilder;
 import model.builder.DefaultBodyBuilder;
 import model.builder.MaterialBuilder;
 
@@ -20,6 +19,7 @@ import static org.lwjgl.opengl.GL11.*;
 
 /**
  * Created on 10.05.2014.
+ *
  * @author Mike Sorokin
  */
 public class OBJModelLoader {

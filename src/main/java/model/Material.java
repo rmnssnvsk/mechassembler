@@ -1,8 +1,5 @@
 package model;
 
-import org.lwjgl.BufferUtils;
-import org.lwjgl.opengl.GL11;
-
 import javax.vecmath.Vector4f;
 
 import static org.lwjgl.opengl.GL11.*;
