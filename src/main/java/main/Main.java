@@ -10,7 +10,10 @@ import view.View;
 import view.builder.CameraBuilder;
 import view.builder.ViewBuilder;
 
+import javax.swing.*;
 import javax.vecmath.Vector3f;
+import java.io.File;
+import java.util.Scanner;
 
 /**
  * <p>
@@ -26,6 +29,13 @@ import javax.vecmath.Vector3f;
 public class Main {
 
     public Main() {
+        File lvlFile;
+        while(true) {
+            if ((lvlFile = new ResourceLoader("levels/" + JOptionPane.showInputDialog("Enter the name of the level!") + ".xml").getFile()) != null) {
+                break;
+            }
+        }
+
         Camera camera = new CameraBuilder()
                 .setPos(new Vector3f(0, 30, 30))
                 .setRot(new Vector3f(45, 0, 0))
@@ -43,9 +53,7 @@ public class Main {
                 .build();
 
         Level level = LevelParser.parse(new ResourceLoader("levels/level1.xml").getFile());
-
         Model model = new Model(camera, level);
-
         Controller controller = new Controller(model, view);
         model.addObserver(controller);
         view.addObserver(controller);

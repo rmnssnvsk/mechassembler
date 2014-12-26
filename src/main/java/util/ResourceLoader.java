@@ -32,7 +32,7 @@ public class ResourceLoader {
             resStream.close();
             outFile.close();
             return fileToLoad;
-        } catch (IOException e) {
+        } catch (IOException | NullPointerException e) {
             e.printStackTrace();
             return null;
         }
