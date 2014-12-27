@@ -16,6 +16,7 @@ import view.Camera;
 
 import javax.vecmath.Vector3f;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Observable;
 
@@ -34,6 +35,7 @@ public class Model extends Observable {
 
     private Level level;
     private List<Body> bodies;
+    private HashMap<String,Integer> bodyCache;
 
     private boolean stopRequested = false;
     private RunState runState = RunState.CONF;
@@ -43,6 +45,7 @@ public class Model extends Observable {
      */
     public Model(Level level) {
         this.bodies = new ArrayList<>();
+        this.bodyCache = new HashMap<>();
         this.level = level;
         BroadphaseInterface broadphaseInterface = new DbvtBroadphase();
         CollisionConfiguration collisionConfiguration = new DefaultCollisionConfiguration();
@@ -87,13 +90,19 @@ public class Model extends Observable {
     }
 
     private void load() {
-        level.getBodies().stream().forEach(b -> bodies.add(b.build()));
+        int i = 0;
+        for (AbstractBodyBuilder b : level.getBodies()) {
+            Body body = b.build();
+            bodies.add(body);
+            bodyCache.put(body.id, i++);
+        }
         bodies.stream().forEach(b -> world.addRigidBody(b.getRigidBody()));
     }
 
     public void reload() {
         bodies.stream().forEach(b -> world.removeRigidBody(b.getRigidBody()));
         bodies.clear();
+        bodyCache.clear();
         load();
     }
 
@@ -135,13 +144,10 @@ public class Model extends Observable {
     }
 
     public void reloadBodyById(String id) {
-        for (int i = 0; i < bodies.size(); i++) {
-            if (bodies.get(i).id.equals(id)) {
-                world.removeRigidBody(bodies.get(i).getRigidBody());
-                bodies.set(i, ((AbstractBodyBuilder) bodies.get(i).getRigidBody().getUserPointer()).build());
-                world.addRigidBody(bodies.get(i).getRigidBody());
-            }
-        }
+        int i = bodyCache.get(id);
+        world.removeRigidBody(bodies.get(i).getRigidBody());
+        bodies.set(i, ((AbstractBodyBuilder) bodies.get(i).getRigidBody().getUserPointer()).build());
+        world.addRigidBody(bodies.get(i).getRigidBody());
     }
 
     public void delete() {

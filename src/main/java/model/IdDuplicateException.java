@@ -5,5 +5,8 @@ package model;
  *
  * @author Mike Sorokin
  */
-public class IdDuplicateException {
+public class IdDuplicateException extends RuntimeException {
+    public IdDuplicateException(String message) {
+        super(message);
+    }
 }
