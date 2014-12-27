@@ -20,8 +20,7 @@ public class ResourceLoader {
         try {
             InputStream resStream = res.openStream();
             BufferedReader reader = new BufferedReader(new InputStreamReader(resStream));
-            File fileToLoad = File.createTempFile(new Random().nextLong() + "", ".tmp");
-            System.out.println("Created tmp file " + fileToLoad.getName());
+            File fileToLoad = File.createTempFile("mechassembler", null);
             PrintWriter outFile = new PrintWriter(fileToLoad);
 
             String line;
