@@ -17,11 +17,18 @@ import static java.lang.Math.*;
  */
 public class CameraBuilder {
     private Vector3f pos = new Vector3f(0, 0, 0), rot = new Vector3f(0, 0, 0);
-    private float fov = 60, aspect = 8 / 6f, zNear = 1 / 1000f, zFar = 1000;
-    private boolean controllable = false;
+    private float fov = 60,
+            aspect = Display.getDesktopDisplayMode().getWidth() / (float) Display.getDesktopDisplayMode().getHeight(),
+            zNear = 1 / 1000f, zFar = 1000;
+    private boolean controllable = true;
 
     public CameraBuilder setPos(Vector3f pos) {
         this.pos = pos;
+        return this;
+    }
+
+    public CameraBuilder setPosX(float x) {
+        this.pos.x = x;
         return this;
     }
 
@@ -75,7 +82,7 @@ public class CameraBuilder {
         return this;
     }
 
-    private CameraBuilder setZFar(float zFar) {
+    public CameraBuilder setZFar(float zFar) {
         this.zFar = zFar;
         return this;
     }

@@ -27,8 +27,7 @@ public abstract class AbstractBodyBuilder {
     protected Vector3f rot = new Vector3f(0, 0, 0);
     protected Vector3f impulse = new Vector3f(0, 0, 0);
     protected CollisionShape shape = new BoxShape(new Vector3f(1, 1, 1));
-    protected DisplayList list = new DisplayList(() -> {
-    });
+    protected Runnable list = () -> {};
 
     public AbstractBodyBuilder(String id) {
         this.id = id;
@@ -181,12 +180,12 @@ public abstract class AbstractBodyBuilder {
         return this;
     }
 
-    public DisplayList getDisplayList() {
+    public Runnable getDisplayList() {
         return list;
     }
 
     public AbstractBodyBuilder setDisplayList(Runnable list) {
-        this.list = new DisplayList(list);
+        this.list = list;
         return this;
     }
 
@@ -210,7 +209,7 @@ public abstract class AbstractBodyBuilder {
         rigidBody.applyCentralImpulse(impulse);
         return new Body(
                 rigidBody,
-                list,
+                new DisplayList(list),
                 id
         );
     }

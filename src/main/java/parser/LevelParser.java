@@ -4,12 +4,12 @@ import model.GoalListener;
 import model.Level;
 import model.Material;
 import model.builder.*;
-import org.newdawn.slick.opengl.Texture;
 import org.simpleframework.xml.Serializer;
 import org.simpleframework.xml.core.Persister;
 import parser.parsetypes.*;
 import util.OBJModelLoader;
-import util.TextureLoader;
+import view.Camera;
+import view.builder.CameraBuilder;
 
 import javax.vecmath.Vector3f;
 import java.io.File;
@@ -18,7 +18,7 @@ import java.util.Map;
 
 public class LevelParser {
     private static Map<String, Material> materials;
-    private static Map<String, Texture> textures;
+    private static Map<String, String> textures;
 
     private static Vector3f toVector3f(ParseVectorXYZ v) {
         return new Vector3f(v.x, v.y, v.z);
@@ -45,12 +45,31 @@ public class LevelParser {
         return builder.build();
     }
 
-    private static Texture toTexture(ParseTexture parseTexture) {
-        return TextureLoader.load(parseTexture.filename);
-    }
-
     private static GoalListener toGoalListener(ParseGoal goal) {
         return new GoalListener(goal.id1, goal.id2, goal.distance, goal.time);
+    }
+
+    private static Camera toCamera(ParseCamera camera) {
+        CameraBuilder builder = new CameraBuilder();
+        if (camera.position != null) {
+            builder.setPos(toVector3f(camera.position));
+        }
+        if (camera.rotation != null) {
+            builder.setRot(toVector3f(camera.rotation));
+        }
+        if (camera.fov != null) {
+            builder.setFOV(camera.fov);
+        }
+        if (camera.aspect != null) {
+            builder.setAspect(camera.aspect);
+        }
+        if (camera.z_near != null) {
+            builder.setZNear(camera.z_near);
+        }
+        if (camera.z_far != null) {
+            builder.setZFar(camera.z_far);
+        }
+        return builder.build();
     }
 
     private static DefaultBodyBuilder toBoxBodyBuilder(ParseBox body) {
@@ -150,16 +169,16 @@ public class LevelParser {
             e.printStackTrace();
         }
         assert sim != null;
-        Level level = new Level(toVector3f(sim.gravity), toGoalListener(sim.goal));
+        Level level = new Level(toVector3f(sim.gravity), toGoalListener(sim.goal), toCamera(sim.camera));
         materials = new HashMap<>();
         for (ParseMaterial parseMaterial : sim.materials) {
             materials.put(parseMaterial.name, toMaterial(parseMaterial));
         }
         textures = new HashMap<>();
         for (ParseTexture parseTexture : sim.textures) {
-            textures.put(parseTexture.name, toTexture(parseTexture));
+            textures.put(parseTexture.name, parseTexture.filename);
         }
-        for (ParseBody parseBody : sim.bodies.bodies) {
+        for (ParseBody parseBody : sim.bodies.list) {
             DefaultBodyBuilder builder;
             if (parseBody instanceof ParseBox) {
                 builder = toBoxBodyBuilder((ParseBox) parseBody);

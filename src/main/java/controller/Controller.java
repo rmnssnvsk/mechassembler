@@ -44,6 +44,7 @@ public class Controller implements Observer {
             events.stream().forEach(e -> {
                 if (e instanceof GoalReachedModelEvent) {
                     model.stop();
+                    Mouse.setGrabbed(false);
                     JOptionPane.showMessageDialog(null, "You win!");
                 }
             });

@@ -3,6 +3,7 @@ package main;
 import controller.Controller;
 import model.Level;
 import model.Model;
+import org.lwjgl.opengl.*;
 import parser.LevelParser;
 import util.ResourceLoader;
 import view.Camera;
@@ -14,6 +15,7 @@ import javax.swing.*;
 import javax.swing.plaf.metal.MetalIconFactory;
 import javax.vecmath.Vector3f;
 import java.io.File;
+
 
 /**
  * <p>
@@ -32,6 +34,10 @@ public class Main {
         String levelName;
         {
             String[] levelList = new File(new ResourceLoader("levels").getURL().getFile()).list();
+            if (levelList == null || levelList.length == 0) {
+                JOptionPane.showMessageDialog(null, "No any levels found.");
+                return;
+            }
             for (int i = 0; i < levelList.length; i++) {
                 levelList[i] = levelList[i].replaceAll("\\.xml", "");
             }
@@ -41,24 +47,15 @@ public class Main {
                 return;
             }
         }
-        Camera camera = new CameraBuilder()
-                .setPos(new Vector3f(0, 30, 30))
-                .setRot(new Vector3f(45, 0, 0))
-                .setAspect(1366 / 768f)
-                .setControllable(true)
-                .build();
+        Level level = LevelParser.parse(new ResourceLoader("levels/" + levelName + ".xml").getFile());
         View view = new ViewBuilder()
-                .setX(1366)
-                .setY(768)
                 .setMouseGrabbed(true)
                 .setTitle("Mechassembler")
-                .setCamera(camera)
+                .setCamera(level.getCamera())
                 .setVertexShaderName("shaders/light.vert")
                 .setFragmentShaderName("shaders/light.frag")
                 .build();
-
-        Level level = LevelParser.parse(new ResourceLoader("levels/" + levelName + ".xml").getFile());
-        Model model = new Model(camera, level);
+        Model model = new Model(level);
         Controller controller = new Controller(model, view);
         model.addObserver(controller);
         view.addObserver(controller);

@@ -1,6 +1,7 @@
 package model;
 
 import model.builder.AbstractBodyBuilder;
+import view.Camera;
 
 import javax.vecmath.Vector3f;
 import java.util.ArrayList;
@@ -15,17 +16,13 @@ public class Level {
     private List<AbstractBodyBuilder> bodies;
     private Vector3f gravity;
     private GoalListener goal;
+    private Camera camera;
 
-    public Level(GoalListener goal) {
-        bodies = new ArrayList<>();
-        gravity = new Vector3f(0, -10, 0);
-        this.goal = goal;
-    }
-
-    public Level(Vector3f gravity, GoalListener goal) {
+    public Level(Vector3f gravity, GoalListener goal, Camera camera) {
         bodies = new ArrayList<>();
         this.gravity = gravity;
         this.goal = goal;
+        this.camera = camera;
     }
 
     public void addBody(AbstractBodyBuilder body) {
@@ -46,5 +43,9 @@ public class Level {
 
     public GoalListener getGoal() {
         return goal;
+    }
+
+    public Camera getCamera() {
+        return camera;
     }
 }

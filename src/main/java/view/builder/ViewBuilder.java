@@ -1,6 +1,7 @@
 package view.builder;
 
 import org.lwjgl.opengl.DisplayMode;
+import org.lwjgl.opengl.Display;
 import view.Camera;
 import view.View;
 
@@ -10,8 +11,8 @@ import view.View;
  * @author Mike Sorokin
  */
 public class ViewBuilder {
-    private int x = 800;
-    private int y = 600;
+    private int x = Display.getDesktopDisplayMode().getWidth();
+    private int y = Display.getDesktopDisplayMode().getHeight();
     private boolean fullscreen = false;
     private boolean vSync = false;
     private boolean resizable = false;

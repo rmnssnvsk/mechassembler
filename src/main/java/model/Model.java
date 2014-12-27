@@ -35,16 +35,14 @@ public class Model extends Observable {
     private Level level;
     private List<Body> bodies;
 
-    private Camera camera;
     private boolean stopRequested = false;
     private RunState runState = RunState.CONF;
 
     /**
      * Создает и инициализирует модель.
      */
-    public Model(Camera camera, Level level) {
+    public Model(Level level) {
         this.bodies = new ArrayList<>();
-        this.camera = camera;
         this.level = level;
         BroadphaseInterface broadphaseInterface = new DbvtBroadphase();
         CollisionConfiguration collisionConfiguration = new DefaultCollisionConfiguration();
@@ -76,7 +74,7 @@ public class Model extends Observable {
      * @param t промежуток времени в секундах.
      */
     private void update(float t) {
-        camera.update(t);
+        level.getCamera().update(t);
         if (runState == RunState.TEST) {
             world.stepSimulation(t);
         }

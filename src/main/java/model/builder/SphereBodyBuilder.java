@@ -33,7 +33,7 @@ public class SphereBodyBuilder extends DefaultBodyBuilder {
     protected Vector3f impulse = new Vector3f(0, 0, 0);
     private float radius = 1;
     private float angularDamping = .3f;
-    private Texture texture = TextureLoader.NO_TEXTURE;
+    private String texture = "";
     private Material material = new MaterialBuilder().build();
     private Vector3f color = new Vector3f(1, 1, 1);
 
@@ -233,11 +233,11 @@ public class SphereBodyBuilder extends DefaultBodyBuilder {
         return this;
     }
 
-    public Texture getTexture() {
+    public String getTexture() {
         return texture;
     }
 
-    public SphereBodyBuilder setTexture(Texture texture) {
+    public SphereBodyBuilder setTexture(String texture) {
         this.texture = texture;
         return this;
     }
@@ -257,7 +257,7 @@ public class SphereBodyBuilder extends DefaultBodyBuilder {
         DisplayList list = new DisplayList(() -> {
             material.apply();
             glColor3f(color.x, color.y, color.z);
-            glBindTexture(GL_TEXTURE_2D, texture.getTextureID());
+            glBindTexture(GL_TEXTURE_2D, TextureLoader.load(texture).getTextureID());
             glBegin(GL_QUADS);
             int heightPolygons = 40;
             int widthPolygons = 40;

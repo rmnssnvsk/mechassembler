@@ -10,6 +10,9 @@ import java.util.List;
 @Root(name = "simulation")
 public class ParseSimulation {
     @Element
+    public ParseCamera camera;
+
+    @Element
     public ParseVectorXYZ gravity;
 
     @ElementList
@@ -27,7 +30,8 @@ public class ParseSimulation {
     @Override
     public String toString() {
         return "Simulation{" +
-                "gravity=" + gravity +
+                "camera=" + camera +
+                ", gravity=" + gravity +
                 ", textures=" + textures +
                 ", materials=" + materials +
                 ", goal=" + goal +
@@ -42,12 +46,12 @@ public class ParseSimulation {
                 @ElementList(entry = "plane", type = ParsePlane.class, inline = true),
                 @ElementList(entry = "objmodel", type = ParseOBJModel.class, inline = true)
         })
-        public List<ParseBody> bodies;
+        public List<ParseBody> list;
 
         @Override
         public String toString() {
             return "BodyList{" +
-                    "bodies=" + bodies +
+                    "list=" + list +
                     '}';
         }
     }
