@@ -8,7 +8,6 @@ import com.bulletphysics.linearmath.DefaultMotionState;
 import com.bulletphysics.linearmath.Transform;
 import model.Body;
 import model.Material;
-import org.newdawn.slick.opengl.Texture;
 import util.DisplayList;
 import util.TextureLoader;
 

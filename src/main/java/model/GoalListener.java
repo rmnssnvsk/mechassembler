@@ -1,7 +1,6 @@
 package model;
 
 import com.bulletphysics.linearmath.Transform;
-import model.builder.BoxBodyBuilder;
 
 import javax.vecmath.Vector3f;
 import java.util.List;

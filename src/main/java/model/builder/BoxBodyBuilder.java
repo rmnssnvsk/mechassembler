@@ -9,7 +9,6 @@ import com.bulletphysics.linearmath.Transform;
 import model.Body;
 import model.Material;
 import org.lwjgl.opengl.GL11;
-import org.newdawn.slick.opengl.Texture;
 import util.DisplayList;
 import util.TextureLoader;
 

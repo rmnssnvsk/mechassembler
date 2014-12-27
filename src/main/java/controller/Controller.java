@@ -28,7 +28,6 @@ import java.util.Observer;
 public class Controller implements Observer {
     private Model model;
     private View view;
-    private RunState state;
 
     public Controller(Model model, View view) {
         this.model = model;
@@ -38,7 +37,6 @@ public class Controller implements Observer {
     @Override
     public void update(Observable o, Object arg) {
         if (o instanceof Model) {
-            view.show(model.getBodies());
             //noinspection unchecked
             List<ModelEvent> events = (List<ModelEvent>) arg;
             events.stream().forEach(e -> {
@@ -48,6 +46,7 @@ public class Controller implements Observer {
                     JOptionPane.showMessageDialog(null, "You win!");
                 }
             });
+            view.show(model.getBodies());
         } else if (o instanceof View) {
             //noinspection unchecked
             List<ViewEvent> events = (List<ViewEvent>) arg;

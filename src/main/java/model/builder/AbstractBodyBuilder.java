@@ -27,7 +27,8 @@ public abstract class AbstractBodyBuilder {
     protected Vector3f rot = new Vector3f(0, 0, 0);
     protected Vector3f impulse = new Vector3f(0, 0, 0);
     protected CollisionShape shape = new BoxShape(new Vector3f(1, 1, 1));
-    protected Runnable list = () -> {};
+    protected Runnable list = () -> {
+    };
 
     public AbstractBodyBuilder(String id) {
         this.id = id;

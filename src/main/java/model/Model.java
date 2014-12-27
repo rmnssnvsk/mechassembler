@@ -12,13 +12,10 @@ import com.bulletphysics.dynamics.constraintsolver.SequentialImpulseConstraintSo
 import model.builder.AbstractBodyBuilder;
 import model.event.GoalReachedModelEvent;
 import model.event.ModelEvent;
-import view.Camera;
 
 import javax.vecmath.Vector3f;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Observable;
+import java.util.*;
+import java.util.function.Consumer;
 
 /**
  * Класс модели. Модель содержит в себе всю информацию о симуляции и умеет обновлять
@@ -26,7 +23,7 @@ import java.util.Observable;
  *
  * @author Mike Sorokin
  */
-public class Model extends Observable {
+public class Model extends Observable implements BodyGetter {
 
     /**
      * Мир, где происходит симуляция
@@ -35,7 +32,8 @@ public class Model extends Observable {
 
     private Level level;
     private List<Body> bodies;
-    private HashMap<String,Integer> bodyCache;
+    private Map<String, Integer> bodyCache;
+    private List<Consumer<BodyGetter>> forces;
 
     private boolean stopRequested = false;
     private RunState runState = RunState.CONF;
@@ -46,6 +44,7 @@ public class Model extends Observable {
     public Model(Level level) {
         this.bodies = new ArrayList<>();
         this.bodyCache = new HashMap<>();
+        this.forces = new ArrayList<>();
         this.level = level;
         BroadphaseInterface broadphaseInterface = new DbvtBroadphase();
         CollisionConfiguration collisionConfiguration = new DefaultCollisionConfiguration();
@@ -79,6 +78,7 @@ public class Model extends Observable {
     private void update(float t) {
         level.getCamera().update(t);
         if (runState == RunState.TEST) {
+            forces.stream().forEach(f -> f.accept(this));
             world.stepSimulation(t);
         }
         List<ModelEvent> events = new ArrayList<>();
@@ -148,6 +148,15 @@ public class Model extends Observable {
         world.removeRigidBody(bodies.get(i).getRigidBody());
         bodies.set(i, ((AbstractBodyBuilder) bodies.get(i).getRigidBody().getUserPointer()).build());
         world.addRigidBody(bodies.get(i).getRigidBody());
+    }
+
+    @Override
+    public Body getBodyById(String id) {
+        return bodies.get(bodyCache.get(id));
+    }
+
+    public void addForce(Consumer<BodyGetter> force) {
+        forces.add(force);
     }
 
     public void delete() {

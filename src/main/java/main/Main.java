@@ -3,17 +3,13 @@ package main;
 import controller.Controller;
 import model.Level;
 import model.Model;
-import org.lwjgl.opengl.*;
 import parser.LevelParser;
 import util.ResourceLoader;
-import view.Camera;
 import view.View;
-import view.builder.CameraBuilder;
 import view.builder.ViewBuilder;
 
 import javax.swing.*;
 import javax.swing.plaf.metal.MetalIconFactory;
-import javax.vecmath.Vector3f;
 import java.io.File;
 
 
