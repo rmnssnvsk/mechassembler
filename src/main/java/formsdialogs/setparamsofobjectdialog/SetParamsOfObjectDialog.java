@@ -30,7 +30,12 @@ public class SetParamsOfObjectDialog extends JDialog {
         // Заполняем таблицу
         for (Param param : params) {
             try {
-                paramsTableEntries.add(new ParamsTableEntry(param.name, (float) toChange.getClass().getDeclaredMethod(param.getterName).invoke(toChange), param));
+                paramsTableEntries.add(new ParamsTableEntry(
+                        param.name,
+                        (float) toChange.getClass().getDeclaredMethod(param.getterName).invoke(toChange),
+                        param.low,
+                        param.hig,
+                        param));
             } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
                 e.printStackTrace();
             }
@@ -149,10 +154,16 @@ public class SetParamsOfObjectDialog extends JDialog {
     private void onOK() {
         // Выставляем новые свойства тела
         for (ParamsTableEntry entry : paramsTableEntries) {
-            try {
-                toChange.getClass().getDeclaredMethod(entry.getParam().setterName, float.class).invoke(toChange, entry.getValue());
-            } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-                e.printStackTrace();
+            if(entry.getMinValue() <= entry.getValue() && entry.getValue() <= entry.getMaxValue()) {
+                try {
+                    toChange.getClass().getDeclaredMethod(entry.getParam().setterName, float.class).invoke(toChange, entry.getValue());
+                } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+                    e.printStackTrace();
+                }
+            }
+            else {
+                JOptionPane.showMessageDialog(null, "Неверно указано значения!");
+                return;
             }
         }
         dispose();

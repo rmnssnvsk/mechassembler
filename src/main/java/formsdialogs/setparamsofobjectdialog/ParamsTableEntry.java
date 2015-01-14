@@ -9,12 +9,18 @@ class ParamsTableEntry {
     private String name;
     private float value;
     private Param param;
+    private float minValue, maxValue;
 
-    public ParamsTableEntry(String name, float value, Param param) {
+    public ParamsTableEntry(String name,
+                            float value,
+                            float minValue,
+                            float maxValue,
+                            Param param) {
         this.name = name;
         this.value = value;
         this.param = param;
-
+        this.minValue = minValue;
+        this.maxValue = maxValue;
     }
 
     public String getName() {
@@ -27,6 +33,22 @@ class ParamsTableEntry {
 
     public float getValue() {
         return value;
+    }
+
+    public float getMinValue() {
+        return minValue;
+    }
+
+    public void setMinValue(float minValue) {
+        this.minValue = minValue;
+    }
+
+    public float getMaxValue() {
+        return maxValue;
+    }
+
+    public void setMaxValue(float maxValue) {
+        this.maxValue = maxValue;
     }
 
     public void setValue(float value) {
