@@ -52,7 +52,7 @@ public class Main {
                 .setFragmentShaderName("shaders/light.frag")
                 .build();
 
-        Level level = LevelParser.parse(new ResourceLoader("levels/level1.xml").getFile());
+        Level level = LevelParser.parse(lvlFile);
         Model model = new Model(camera, level);
         Controller controller = new Controller(model, view);
         model.addObserver(controller);
