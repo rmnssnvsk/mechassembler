@@ -11,9 +11,9 @@ import view.builder.CameraBuilder;
 import view.builder.ViewBuilder;
 
 import javax.swing.*;
-import javax.swing.plaf.metal.MetalIconFactory;
 import javax.vecmath.Vector3f;
 import java.io.File;
+import java.util.Scanner;
 
 /**
  * <p>
@@ -29,18 +29,13 @@ import java.io.File;
 public class Main {
 
     public Main() {
-        String levelName;
-        {
-            String[] levelList = new File(new ResourceLoader("levels").getURL().getFile()).list();
-            for (int i = 0; i < levelList.length; i++) {
-                levelList[i] = levelList[i].replaceAll("\\.xml", "");
-            }
-            Icon icon = new MetalIconFactory.TreeFolderIcon();
-            levelName = (String) JOptionPane.showInputDialog(null, "Select level:", "Mechassembler", JOptionPane.QUESTION_MESSAGE, icon, levelList, levelList[0]);
-            if (levelName == null) {
-                return;
+        File lvlFile;
+        while(true) {
+            if ((lvlFile = new ResourceLoader("levels/" + JOptionPane.showInputDialog("Enter the name of the level!") + ".xml").getFile()) != null) {
+                break;
             }
         }
+
         Camera camera = new CameraBuilder()
                 .setPos(new Vector3f(0, 30, 30))
                 .setRot(new Vector3f(45, 0, 0))
@@ -57,7 +52,7 @@ public class Main {
                 .setFragmentShaderName("shaders/light.frag")
                 .build();
 
-        Level level = LevelParser.parse(new ResourceLoader("levels/" + levelName + ".xml").getFile());
+        Level level = LevelParser.parse(new ResourceLoader("levels/level1.xml").getFile());
         Model model = new Model(camera, level);
         Controller controller = new Controller(model, view);
         model.addObserver(controller);
