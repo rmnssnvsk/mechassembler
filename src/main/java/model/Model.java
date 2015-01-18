@@ -81,7 +81,7 @@ public class Model extends Observable {
             world.stepSimulation(t);
         }
         List<ModelEvent> events = new ArrayList<>();
-        if (level.getGoal().isGoalReached(bodies, t)) {
+        if (level.getGoal() != null && level.getGoal().isGoalReached(bodies, t)) {
             events.add(new GoalReachedModelEvent(this));
         }
         setChanged();

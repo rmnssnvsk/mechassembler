@@ -50,7 +50,7 @@ public class LevelParser {
     }
 
     private static GoalListener toGoalListener(ParseGoal goal) {
-        return new GoalListener(goal.id1, goal.id2, goal.distance, goal.time);
+        return (goal != null ? new GoalListener(goal.id1, goal.id2, goal.distance, goal.time) : null);
     }
 
     private static DefaultBodyBuilder toBoxBodyBuilder(ParseBox body) {

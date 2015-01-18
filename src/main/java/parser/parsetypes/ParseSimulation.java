@@ -18,7 +18,7 @@ public class ParseSimulation {
     @ElementList
     public List<ParseMaterial> materials;
 
-    @Element
+    @Element(required = false)
     public ParseGoal goal;
 
     @Element
