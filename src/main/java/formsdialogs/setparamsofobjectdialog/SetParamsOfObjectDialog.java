@@ -81,14 +81,18 @@ public class SetParamsOfObjectDialog extends JDialog {
 
             @Override
             public int getColumnCount() {
-                return 2;
+                return 4;
             }
 
             @Override
             public String getColumnName(int columnIndex) {
                 if (columnIndex == 0) {
                     return "Name";
-                } else if (columnIndex == 1) {
+                } else if (columnIndex == 1)  {
+                    return "Min value";
+                } else if (columnIndex == 2) {
+                    return "Max value";
+                } else if (columnIndex == 3) {
                     return "Value";
                 }
                 return "";
@@ -98,7 +102,7 @@ public class SetParamsOfObjectDialog extends JDialog {
             public Class<?> getColumnClass(int columnIndex) {
                 if (columnIndex == 0) {
                     return String.class;
-                } else if (columnIndex == 1) {
+                } else if (columnIndex == 1 || columnIndex == 2 || columnIndex == 3) {
                     return Float.class;
                 }
                 return null;
@@ -106,7 +110,7 @@ public class SetParamsOfObjectDialog extends JDialog {
 
             @Override
             public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return columnIndex == 1;
+                return columnIndex == 3;
             }
 
             @Override
@@ -114,7 +118,11 @@ public class SetParamsOfObjectDialog extends JDialog {
                 ParamsTableEntry currentEntry = paramsTableEntries.get(rowIndex);
                 if (columnIndex == 0) {
                     return currentEntry.getName();
-                } else if (columnIndex == 1) {
+                } else if (columnIndex == 1)  {
+                    return currentEntry.getMinValue();
+                } else if (columnIndex == 2) {
+                    return currentEntry.getMaxValue();
+                } else if (columnIndex == 3) {
                     return currentEntry.getValue();
                 }
                 return null;
@@ -123,9 +131,7 @@ public class SetParamsOfObjectDialog extends JDialog {
             @Override
             public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
                 ParamsTableEntry currentEntry = paramsTableEntries.get(rowIndex);
-                if (columnIndex == 0) {
-                    currentEntry.setName((String) aValue);
-                } else if (columnIndex == 1) {
+                if (columnIndex == 3) {
                     currentEntry.setValue((float) aValue);
                 }
                 System.out.println(aValue.toString());
