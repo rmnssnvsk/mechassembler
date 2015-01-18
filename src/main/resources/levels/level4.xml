@@ -36,7 +36,7 @@
             <mass>0</mass>
             <restitution>0</restitution>
             <size>
-                <x>13</x>
+                <x>20</x>
                 <y>0.1</y>
                 <z>3</z>
             </size>
@@ -47,7 +47,7 @@
             </color>
             <position>
                 <x>0</x>
-                <y>12</y>
+                <y>30</y>
                 <z>0</z>
             </position>
             <rotation>
@@ -67,9 +67,9 @@
             <id>bucket</id>
             <filename>models/bucket.obj</filename>
             <position>
-                <x>-15</x>
+                <x>-30</x>
                 <y>0</y>
-                <z>0</z>
+                <z>1.2</z>
             </position>
         </objmodel>
         <plane>
@@ -94,13 +94,13 @@
                 <z>1</z>
             </size>
             <color>
-                <r>1</r>
-                <g>0</g>
+                <r>0</r>
+                <g>1</g>
                 <b>0</b>
             </color>
             <position>
                 <x>9</x>
-                <y>24</y>
+                <y>37.5</y>
                 <z>0</z>
             </position>
             <rotation>
