@@ -31,7 +31,7 @@ public class Main {
     public Main() {
         File lvlFile;
         while(true) {
-            if ((lvlFile = new ResourceLoader("levels/" + JOptionPane.showInputDialog("Enter the name of the level!") + ".xml").getFile()) != null) {
+            if ((lvlFile = new ResourceLoader().getFile("levels/" + JOptionPane.showInputDialog("Enter the name of the level!") + ".xml")) != null) {
                 break;
             }
         }

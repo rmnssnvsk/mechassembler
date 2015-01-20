@@ -32,7 +32,7 @@ public class OBJModelLoader {
         Runnable list;
         MTL mtl = null;
         try {
-            BufferedReader reader = new BufferedReader(new FileReader(new ResourceLoader(name).getFile()));
+            BufferedReader reader = new BufferedReader(new FileReader(new ResourceLoader().getFile(name)));
             String line;
             while ((line = reader.readLine()) != null) {
                 line = line.trim().replaceAll(" {2,}", " ");
