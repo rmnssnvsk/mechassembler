@@ -1,4 +1,4 @@
-package parser;
+package util.parser;
 
 import model.GoalListener;
 import model.Level;
@@ -7,7 +7,7 @@ import model.builder.*;
 import org.newdawn.slick.opengl.Texture;
 import org.simpleframework.xml.Serializer;
 import org.simpleframework.xml.core.Persister;
-import parser.parsetypes.*;
+import util.parser.parsetypes.*;
 import util.OBJModelLoader;
 import util.TextureLoader;
 

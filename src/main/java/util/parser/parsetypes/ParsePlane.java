@@ -1,27 +1,28 @@
-package parser.parsetypes;
+package util.parser.parsetypes;
 
 import org.simpleframework.xml.Element;
 
 /**
- * Created on 22.11.14.
+ * Created on 12/21/14.
  *
- * @author Roman Sosnovsky
+ * @author Mike Sorokin
  */
-
-@Element(name = "box")
-public class ParseBox extends ParseBody {
+@Element(name = "plane")
+public class ParsePlane extends ParseBody {
     @Element(required = false)
-    public String texture;
+    public ParseVectorRGB color;
     @Element(required = false)
     public String material;
     @Element(required = false)
-    public ParseVectorXYZ size;
+    public ParseVectorXYZ normal;
     @Element(required = false)
-    public ParseVectorRGB color;
+    public Float size;
+    @Element(required = false)
+    public Float distance;
 
     @Override
     public String toString() {
-        return "Box{" +
+        return "Plane{" +
                 "id='" + id + '\'' +
                 ", mass=" + mass +
                 ", restitution=" + restitution +
@@ -30,11 +31,11 @@ public class ParseBox extends ParseBody {
                 ", rotation=" + rotation +
                 ", impulse=" + impulse +
                 ", changeableParams=" + changeableParams +
-                ", texture='" + texture + '\'' +
-                ", material='" + material + '\'' +
-                ", size=" + size +
                 ", color=" + color +
+                ", material='" + material + '\'' +
+                ", normal=" + normal +
+                ", size=" + size +
+                ", distance=" + distance +
                 '}';
     }
-
 }

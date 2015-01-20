@@ -1,4 +1,4 @@
-package parser.parsetypes;
+package util.parser.parsetypes;
 
 import org.simpleframework.xml.Element;
 
@@ -8,22 +8,20 @@ import org.simpleframework.xml.Element;
  * @author Roman Sosnovsky
  */
 
-@Element(name = "sphere")
-public class ParseSphere extends ParseBody {
-    @Element(required = false)
-    public Float radius;
-    @Element(name = "angular_damping", required = false)
-    public Float angularDamping;
+@Element(name = "box")
+public class ParseBox extends ParseBody {
     @Element(required = false)
     public String texture;
     @Element(required = false)
     public String material;
     @Element(required = false)
+    public ParseVectorXYZ size;
+    @Element(required = false)
     public ParseVectorRGB color;
 
     @Override
     public String toString() {
-        return "Sphere{" +
+        return "Box{" +
                 "id='" + id + '\'' +
                 ", mass=" + mass +
                 ", restitution=" + restitution +
@@ -32,10 +30,9 @@ public class ParseSphere extends ParseBody {
                 ", rotation=" + rotation +
                 ", impulse=" + impulse +
                 ", changeableParams=" + changeableParams +
-                ", radius=" + radius +
-                ", angularDamping=" + angularDamping +
                 ", texture='" + texture + '\'' +
                 ", material='" + material + '\'' +
+                ", size=" + size +
                 ", color=" + color +
                 '}';
     }

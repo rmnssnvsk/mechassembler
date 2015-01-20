@@ -1,4 +1,4 @@
-package parser.parsetypes;
+package util.parser.parsetypes;
 
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
@@ -9,17 +9,20 @@ import org.simpleframework.xml.Root;
  * @author Roman Sosnovsky
  */
 @Root
-public class ParseTexture {
+public class ParseVectorRGB {
     @Element
-    public String name;
+    public Float r;
     @Element
-    public String filename;
+    public Float g;
+    @Element
+    public Float b;
 
     @Override
     public String toString() {
-        return "Texture{" +
-                "filename='" + name + '\'' +
-                ", filename='" + filename + '\'' +
+        return "Vector{" +
+                "r=" + r +
+                ", g=" + g +
+                ", b=" + b +
                 '}';
     }
 }
