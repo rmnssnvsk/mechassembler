@@ -3,7 +3,7 @@ package main;
 import controller.Controller;
 import model.Level;
 import model.Model;
-import parser.LevelParser;
+import util.parser.LevelParser;
 import util.ResourceLoader;
 import view.Camera;
 import view.View;
