@@ -17,9 +17,7 @@ public class ResourceLoader {
     private URL res;
 
     public URL getURL(String src) {
-        if (res == null) {
-            res = getClass().getClassLoader().getResource(src);
-        }
+        res = getClass().getClassLoader().getResource(src);
         return res;
     }
 
@@ -73,7 +71,7 @@ public class ResourceLoader {
     public List<String> getLevelsList() {
         List<String> levelsList = new LinkedList<>();
         try {
-            Scanner in = new Scanner(new ResourceLoader().getFile("res-levels-list"));
+            Scanner in = new Scanner(getFile("res-levels-list"));
             while (in.hasNextLine()) {
                 levelsList.add(in.nextLine().trim());
             }

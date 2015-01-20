@@ -10,7 +10,12 @@ import java.io.IOException;
  * @author Mike Sorokin
  */
 public class TextureLoader {
-    public static final Texture NO_TEXTURE = load("textures/notexture.png");
+
+    public TextureLoader() {
+
+    }
+
+    public final Texture NO_TEXTURE = load("textures/notexture.png");
 
     public static Texture load(String name) {
         try {

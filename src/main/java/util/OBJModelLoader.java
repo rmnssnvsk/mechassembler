@@ -88,7 +88,7 @@ public class OBJModelLoader {
         list = () -> {
             new MaterialBuilder().build().apply();
             glColor3f(1, 1, 1);
-            glBindTexture(GL_TEXTURE_2D, TextureLoader.NO_TEXTURE.getTextureID());
+            glBindTexture(GL_TEXTURE_2D, new TextureLoader().NO_TEXTURE.getTextureID());
             for (Face face : faces) {
                 if (face.vertices != null) {
                     glBegin(GL_POLYGON);

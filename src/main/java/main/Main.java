@@ -1,6 +1,7 @@
 package main;
 
 import controller.Controller;
+import formsdialogs.startupform.StartupForm;
 import model.Level;
 import model.Model;
 import util.parser.LevelParser;
@@ -29,7 +30,8 @@ import java.util.Scanner;
 public class Main {
 
     public Main() {
-        File lvlFile;
+        new StartupForm();
+        /*File lvlFile;
         while(true) {
             if ((lvlFile = new ResourceLoader().getFile("levels/" + JOptionPane.showInputDialog("Enter the name of the level!") + ".xml")) != null) {
                 break;
@@ -60,7 +62,7 @@ public class Main {
 
         model.start();
         model.delete();
-        view.delete();
+        view.delete();*/
     }
 
     /**

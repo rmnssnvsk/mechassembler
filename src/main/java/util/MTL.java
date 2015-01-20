@@ -82,7 +82,7 @@ class MTL {
             if (map_Kd != null) {
                 map_Kd.bind();
             } else {
-                glBindTexture(GL_TEXTURE_2D, TextureLoader.NO_TEXTURE.getTextureID());
+                glBindTexture(GL_TEXTURE_2D, new TextureLoader().NO_TEXTURE.getTextureID());
             }
         }
     }
