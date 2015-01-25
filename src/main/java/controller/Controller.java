@@ -70,7 +70,11 @@ public class Controller implements Observer {
                         ((AbstractBodyBuilder) callback.collisionObject.getUserPointer()).change();
                         Mouse.setGrabbed(view.getMouseGrabbed());
                     }
-                    model.reloadBodyById(((AbstractBodyBuilder) callback.collisionObject.getUserPointer()).id);
+                    try {
+                        model.reloadBodyById(((AbstractBodyBuilder) callback.collisionObject.getUserPointer()).id);
+                    } catch (NullPointerException ignore) {
+
+                    }
                 } else if (e instanceof StateChangeRequestedViewEvent) {
                     StateChangeRequestedViewEvent event = (StateChangeRequestedViewEvent) e;
                     if (event.state != model.getRunState()) {

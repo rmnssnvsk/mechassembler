@@ -1,4 +1,4 @@
-package parser;
+package util.parser;
 
 import model.GoalListener;
 import model.Level;
@@ -7,7 +7,7 @@ import model.builder.*;
 import org.newdawn.slick.opengl.Texture;
 import org.simpleframework.xml.Serializer;
 import org.simpleframework.xml.core.Persister;
-import parser.parsetypes.*;
+import util.parser.parsetypes.*;
 import util.OBJModelLoader;
 import util.TextureLoader;
 
@@ -17,18 +17,22 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class LevelParser {
-    private static Map<String, Material> materials;
-    private static Map<String, Texture> textures;
+    public LevelParser() {
 
-    private static Vector3f toVector3f(ParseVectorXYZ v) {
+    }
+
+    private Map<String, Material> materials;
+    private Map<String, Texture> textures;
+
+    private Vector3f toVector3f(ParseVectorXYZ v) {
         return new Vector3f(v.x, v.y, v.z);
     }
 
-    private static Vector3f toVector3f(ParseVectorRGB v) {
+    private Vector3f toVector3f(ParseVectorRGB v) {
         return new Vector3f(v.r, v.g, v.b);
     }
 
-    private static Material toMaterial(ParseMaterial parseMaterial) {
+    private Material toMaterial(ParseMaterial parseMaterial) {
         MaterialBuilder builder = new MaterialBuilder();
         if (parseMaterial.ambient != null) {
             builder.setAmbient(toVector3f(parseMaterial.ambient));
@@ -45,15 +49,15 @@ public class LevelParser {
         return builder.build();
     }
 
-    private static Texture toTexture(ParseTexture parseTexture) {
+    private Texture toTexture(ParseTexture parseTexture) {
         return TextureLoader.load(parseTexture.filename);
     }
 
-    private static GoalListener toGoalListener(ParseGoal goal) {
+    private GoalListener toGoalListener(ParseGoal goal) {
         return (goal != null ? new GoalListener(goal.id1, goal.id2, goal.distance, goal.time) : null);
     }
 
-    private static DefaultBodyBuilder toBoxBodyBuilder(ParseBox body) {
+    private DefaultBodyBuilder toBoxBodyBuilder(ParseBox body) {
         BoxBodyBuilder builder = new BoxBodyBuilder(body.id);
         if (body.texture != null) {
             builder.setTexture(textures.get(body.texture));
@@ -70,11 +74,11 @@ public class LevelParser {
         return builder;
     }
 
-    private static DefaultBodyBuilder toOBJBodyBuilder(ParseOBJModel body) {
+    private DefaultBodyBuilder toOBJBodyBuilder(ParseOBJModel body) {
         return OBJModelLoader.load(body.filename, body.id);
     }
 
-    private static DefaultBodyBuilder toPlaneBodyBuilder(ParsePlane body) {
+    private DefaultBodyBuilder toPlaneBodyBuilder(ParsePlane body) {
         PlaneBodyBuilder builder = new PlaneBodyBuilder(body.id);
         if (body.color != null) {
             builder.setColor(toVector3f(body.color));
@@ -94,7 +98,7 @@ public class LevelParser {
         return builder;
     }
 
-    private static DefaultBodyBuilder toSphereBodyBuilder(ParseSphere body) {
+    private DefaultBodyBuilder toSphereBodyBuilder(ParseSphere body) {
         SphereBodyBuilder builder = new SphereBodyBuilder(body.id);
         if (body.radius != null) {
             builder.setRadius(body.radius);
@@ -114,7 +118,7 @@ public class LevelParser {
         return builder;
     }
 
-    private static DefaultBodyBuilder toDefaultBodyBuilder(DefaultBodyBuilder builder, ParseBody body) {
+    private DefaultBodyBuilder toDefaultBodyBuilder(DefaultBodyBuilder builder, ParseBody body) {
         if (body.mass != null) {
             builder.setMass(body.mass);
         }
@@ -141,7 +145,7 @@ public class LevelParser {
         return builder;
     }
 
-    public static Level parse(File file) {
+    public Level parse(File file) {
         Serializer serializer = new Persister();
         ParseSimulation sim = null;
         try {
@@ -176,7 +180,7 @@ public class LevelParser {
         return level;
     }
 
-    public static void print(File file) {
+    public void print(File file) {
         Serializer serializer = new Persister();
         ParseSimulation sim = null;
         try {

@@ -15,7 +15,7 @@ class Shader {
         StringBuilder source = new StringBuilder();
 
 
-        BufferedReader reader = new BufferedReader(new FileReader(new ResourceLoader(name).getFile()));
+        BufferedReader reader = new BufferedReader(new FileReader(new ResourceLoader().getFile(name)));
         String line;
         while ((line = reader.readLine()) != null) {
             source.append(line).append('\n');

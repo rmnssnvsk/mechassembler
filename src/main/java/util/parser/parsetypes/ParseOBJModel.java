@@ -1,4 +1,4 @@
-package parser.parsetypes;
+package util.parser.parsetypes;
 
 /**
  * Created on 12/20/14.

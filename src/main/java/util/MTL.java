@@ -21,7 +21,7 @@ class MTL {
     HashMap<String, Style> styles;
 
     public MTL(String filename) throws IOException {
-        BufferedReader reader = new BufferedReader(new FileReader(new ResourceLoader(filename).getFile()));
+        BufferedReader reader = new BufferedReader(new FileReader(new ResourceLoader().getFile(filename)));
         String line;
         styles = new HashMap<>();
         String curStyleName;
@@ -82,7 +82,7 @@ class MTL {
             if (map_Kd != null) {
                 map_Kd.bind();
             } else {
-                glBindTexture(GL_TEXTURE_2D, TextureLoader.NO_TEXTURE.getTextureID());
+                glBindTexture(GL_TEXTURE_2D, new TextureLoader().NO_TEXTURE.getTextureID());
             }
         }
     }

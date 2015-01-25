@@ -16,7 +16,7 @@ public class Configs {
     static {
         params = new HashMap<>();
         try {
-            BufferedReader reader = new BufferedReader(new FileReader(new ResourceLoader("settings.cfg").getFile()));
+            BufferedReader reader = new BufferedReader(new FileReader(new ResourceLoader().getFile("settings.cfg")));
             String line;
             while ((line = reader.readLine()) != null) {
                 if (line.matches("\\s*#.*")) {

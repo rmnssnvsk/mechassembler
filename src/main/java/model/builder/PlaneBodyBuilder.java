@@ -282,7 +282,7 @@ public class PlaneBodyBuilder extends DefaultBodyBuilder {
         DisplayList list = new DisplayList(() -> {
             material.apply();
             glColor3f(color.x, color.y, color.z);
-            glBindTexture(GL_TEXTURE_2D, TextureLoader.NO_TEXTURE.getTextureID());
+            glBindTexture(GL_TEXTURE_2D, new TextureLoader().NO_TEXTURE.getTextureID());
             glBegin(GL_QUADS);
             glNormal3f(normal.x, normal.y, normal.z);
             glVertex3f(-size, 0, -size);

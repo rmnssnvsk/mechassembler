@@ -1,4 +1,4 @@
-package parser.parsetypes;
+package util.parser.parsetypes;
 
 import org.simpleframework.xml.Element;
 

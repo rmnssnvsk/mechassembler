@@ -31,7 +31,7 @@ public class BoxBodyBuilder extends DefaultBodyBuilder {
     protected Vector3f pos = new Vector3f(0, 0, 0);
     protected Vector3f rot = new Vector3f(0, 0, 0);
     protected Vector3f impulse = new Vector3f(0, 0, 0);
-    private Texture texture = TextureLoader.NO_TEXTURE;
+    private Texture texture = new TextureLoader().NO_TEXTURE;
     private Material material = new MaterialBuilder().build();
     private Vector3f size = new Vector3f(1, 1, 1);
     private Vector3f color = new Vector3f(1, 1, 1);

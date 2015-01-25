@@ -32,7 +32,7 @@ public class OBJModelLoader {
         Runnable list;
         MTL mtl = null;
         try {
-            BufferedReader reader = new BufferedReader(new FileReader(new ResourceLoader(name).getFile()));
+            BufferedReader reader = new BufferedReader(new FileReader(new ResourceLoader().getFile(name)));
             String line;
             while ((line = reader.readLine()) != null) {
                 line = line.trim().replaceAll(" {2,}", " ");
@@ -88,7 +88,7 @@ public class OBJModelLoader {
         list = () -> {
             new MaterialBuilder().build().apply();
             glColor3f(1, 1, 1);
-            glBindTexture(GL_TEXTURE_2D, TextureLoader.NO_TEXTURE.getTextureID());
+            glBindTexture(GL_TEXTURE_2D, new TextureLoader().NO_TEXTURE.getTextureID());
             for (Face face : faces) {
                 if (face.vertices != null) {
                     glBegin(GL_POLYGON);
